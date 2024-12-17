@@ -12,7 +12,7 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
 
---dsa
+--stuff for future features
 --day = game:GetService("ReplicatedStorage").world.cycle
 --luck = workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Merlin"):WaitForChild("Merlin"):WaitForChild("luck"):InvokeServer()
 --relic = workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Merlin"):WaitForChild("Merlin"):WaitForChild("power"):InvokeServer()
@@ -48,8 +48,68 @@ local Window = Fluent:CreateWindow({
 --workspace.world.npcs.Appraiser.dialogprompt.MaxActivationDistance = 7000000000
 --workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Appraiser"):WaitForChild("appraiser"):WaitForChild("appraise"):InvokeServer()
 
+function AntiAfk2()
+    spawn(function()
+        while AntiAfk do
+            game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("afk"):FireServer(false)
+            task.wait(0.01)
+        end
+    end)
+end      
 
+local function createBillboardGui(locationName, position, rotation)
+    -- Create a part to attach the BillboardGui
+    local part = Instance.new("Part")
+    part.Size = Vector3.new(1, 1, 1)
+    part.Anchored = true
+    part.CanCollide = false
+    part.Position = position
+    part.Orientation = Vector3.new(rotation.X, rotation.Y, rotation.Z)
+    part.Name = locationName
+    part.Parent = workspace
 
+    -- Create the BillboardGui
+    local billboardGui = Instance.new("BillboardGui")
+    billboardGui.Adornee = part
+    billboardGui.Size = UDim2.new(0, 80, 0, 70)  -- Adjusted size to fit both text lines
+    billboardGui.AlwaysOnTop = true
+    billboardGui.Parent = part
+
+    -- Ensure the size is unaffected by distance
+    billboardGui.MaxDistance = 0
+
+    -- Create a frame to hold the text labels
+    local frame = Instance.new("Frame")
+    frame.Size = UDim2.new(1, 0, 1, 0) -- Full size of the BillboardGui
+    frame.BackgroundTransparency = 1  -- No background color
+    frame.Parent = billboardGui
+
+    -- Create a UIListLayout to automatically manage layout of the text labels
+    local layout = Instance.new("UIListLayout")
+    layout.FillDirection = Enum.FillDirection.Vertical  -- Stack the labels vertically
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Padding = UDim.new(0, 5)  -- Add a small padding between the labels
+    layout.Parent = frame
+
+    -- Create a text label for the location name
+    local textLabel = Instance.new("TextLabel")
+    textLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Take up half the size of the BillboardGui
+    textLabel.BackgroundTransparency = 1
+    textLabel.Text = "[" .. locationName .. "]"  -- Add brackets around the location name
+    textLabel.TextColor3 = Color3.new(0, 0, 1) -- Blue color
+    textLabel.TextScaled = true  -- Keep the text scaled proportionally
+    textLabel.Font = Enum.Font.GothamBold  -- Set the font to Gotham Bold
+    textLabel.Parent = frame
+
+    -- Create another text label for the distance
+    local distanceLabel = Instance.new("TextLabel")
+    distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Take up the other half of the BillboardGui
+    distanceLabel.BackgroundTransparency = 1
+    distanceLabel.TextColor3 = Color3.new(0, 0, 1)  -- Blue color
+    distanceLabel.TextScaled = true  -- Keep the text scaled proportionally
+    distanceLabel.Font = Enum.Font.Gotham  -- Set the font to Gotham
+    distanceLabel.Parent = frame
+end
 
 do 
     
@@ -123,9 +183,32 @@ end
 
 -- // // // Features List // // // --
 -- a lot
-game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5803.2783203125, 135.30149841308594, 407.7121887207031)
 -- // // // Location Tables // // // --
     -- Location Values
+    -- Define the locations as a table
+    local locations = {
+        ["Moosewood"] = {Position = Vector3.new(470.000000, 150.935791, 260.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["The Depths"] = {Position = Vector3.new(853.240295, -740.365906, 1335.115723), Rotation = Vector3.new(180.000000, 55.258999, 180.000000)},
+        ["Ancient Isles"] = {Position = Vector3.new(5805.021484, 135.301498, 405.922119), Rotation = Vector3.new(0.000000, -42.668999, 0.000000)},
+        ["Forsaken Shores"] = {Position = Vector3.new(-2675.331055, 164.795013, 1758.057129), Rotation = Vector3.new(0.000000, 75.242996, 0.000000)},
+        ["Enchant"] = {Position = Vector3.new(1310.264404, -805.292236, -99.972527), Rotation = Vector3.new(180.000000, -1.252000, 180.000000)},
+        ["Terapin"] = {Position = Vector3.new(-143.000000, 145.072601, 1909.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Crafting"] = {Position = Vector3.new(-3160.000000, -745.563965, 1684.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Roslit Bay"] = {Position = Vector3.new(-1476.000000, 133.500000, 671.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Desolate Deep"] = {Position = Vector3.new(-1656.197144, -213.779999, -2846.942383), Rotation = Vector3.new(0.000000, 56.243000, 0.000000)},
+        ["Sunstone"] = {Position = Vector3.new(-933.000000, 131.816345, -1119.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Brine Pool"] = {Position = Vector3.new(-1794.000000, -142.961349, -3302.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Spike"] = {Position = Vector3.new(-1254.000000, 137.389557, 1555.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Statue of Skibidi"] = {Position = Vector3.new(73.000000, 141.929993, -1028.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Arch"] = {Position = Vector3.new(999.000000, 131.320236, -1237.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Snowcap"] = {Position = Vector3.new(2649.000000, 142.283829, 2521.000244), Rotation = Vector3.new(0.000000, -26.242001, 0.000000)},
+        ["Volcano"] = {Position = Vector3.new(-1929.942017, 151.588486, 328.903198), Rotation = Vector3.new(0.000000, -3.254000, 0.000000)},
+        ["Vertigo"] = {Position = Vector3.new(-110.001328, -515.299377, 1149.999268), Rotation = Vector3.new(180.000000, 2.255000, 180.000000)},
+        ["Mushgrove"] = {Position = Vector3.new(2501.000000, 131.000015, -720.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Fischmas 2024"] = {Position = Vector3.new(87.360214, 294.499969, -10303.833008), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Fischmas City"] = {Position = Vector3.new(25.335495, 364.635834, -9582.040039), Rotation = Vector3.new(180.000000, 74.999001, 180.000000)}
+    }
+
     local LocationValues = {
         {name = "moosewood", coords = Vector3.new(470, 150, 260)},
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125)},
@@ -145,7 +228,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5803.278
         {name = "Volcano", coords = Vector3.new(-1908, 164, 310)},
         {name = "Vertigo", coords = Vector3.new(-110, -515, 1150)},
         {name = "mushgrove", coords = Vector3.new(2501, 131, -720)},
-
+        {name = "Fischmas 2024", coords = Vector3.new(87.36021423339844, 294.5, -10303.8330078125)},
         }
 
     --Item Values
@@ -209,7 +292,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5803.278
         {name = "snowcap", coords = Vector3.new(2649, 142, 2521), remotePath = "Mike Merchant"},
     }
 -- // // // Variables // // // --
-    local CastMode = "Legit"
+    local CastMode = "Blatant"
     local ShakeMode = "Navigation"
     local ReelMode = "Blatant"
     local CollectMode = "Teleports"
@@ -220,6 +303,7 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5803.278
     local Noclip = false
     local RunCount = false
     local WebhookLog = false
+    local espEnabled = false
 -- // // // Tabs // // // --
     local Tabs = {
         Main = Window:AddTab({ Title = "Main", Icon = "house" }),
@@ -448,98 +532,98 @@ game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(5803.278
         end)
     end
 -- // // // Sell items // // // --
--- all merchents
---moosewood workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---depths workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Milo Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---ancient workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mann Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---forsaken workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marytn Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---roslit workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Matt Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---desolate workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mel Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---sunstone workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Max Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
---snowcap workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mike Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    -- all merchents
+    --moosewood workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --depths workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Milo Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --ancient workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mann Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --forsaken workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marytn Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --roslit workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Matt Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --desolate workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mel Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --sunstone workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Max Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+    --snowcap workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mike Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
 
 
-function SellHand()
-        local currentPosition = HumanoidRootPart.CFrame
-        local sellPosition = CFrame.new(464, 151, 232)
-        local wasAutoFreezeActive = false
-        if AutoFreeze then
-            wasAutoFreezeActive = true
-            AutoFreeze = false
+    function SellHand()
+            local currentPosition = HumanoidRootPart.CFrame
+            local sellPosition = CFrame.new(464, 151, 232)
+            local wasAutoFreezeActive = false
+            if AutoFreeze then
+                wasAutoFreezeActive = true
+                AutoFreeze = false
+            end
+            HumanoidRootPart.CFrame = sellPosition
+            task.wait(0.5)
+            workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild("merchant"):WaitForChild("sell"):InvokeServer()
+            task.wait(1)
+            HumanoidRootPart.CFrame = currentPosition
+            if wasAutoFreezeActive then
+                AutoFreeze = true
+                rememberPosition()
+            end
         end
-        HumanoidRootPart.CFrame = sellPosition
-        task.wait(0.5)
-        workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Marc Merchant"):WaitForChild("merchant"):WaitForChild("sell"):InvokeServer()
-        task.wait(1)
-        HumanoidRootPart.CFrame = currentPosition
-        if wasAutoFreezeActive then
-            AutoFreeze = true
-            rememberPosition()
-        end
-    end
--- Function to calculate the distance between two Vector3 points
-local function getDistance(pos1, pos2)
-    return (pos1 - pos2).Magnitude
-end
-
-function SellAll()
-    -- Ensure LocalPlayer and HumanoidRootPart exist
-    local player = game.Players.LocalPlayer
-    if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
-        warn("LocalPlayer or HumanoidRootPart not found!")
-        return
-    end
-    -- gotta add setup function that teleports and interacts with all merchants
-
-    local humanoidRootPart = player.Character.HumanoidRootPart
-    local currentPosition = humanoidRootPart.Position
-
-    print("Current Position: " .. tostring(currentPosition))  -- Debugging step
-
-    -- Find the nearest location
-    local nearestLocation = nil
-    local shortestDistance = math.huge
-    print("Looking for nearest location...")  -- Debugging step
-
-    for _, location in ipairs(MerchantValues) do
-        local distance = getDistance(currentPosition, location.coords)
-        print("Checking location: " .. location.name .. " at distance: " .. distance)  -- Debugging step
-        if distance < shortestDistance then
-            shortestDistance = distance
-            nearestLocation = location
-        end
+    -- Function to calculate the distance between two Vector3 points
+    local function getDistance(pos1, pos2)
+        return (pos1 - pos2).Magnitude
     end
 
-    if nearestLocation then
-        print("Nearest location found: " .. nearestLocation.name)  -- Debugging step
+    function SellAll()
+        -- Ensure LocalPlayer and HumanoidRootPart exist
+        local player = game.Players.LocalPlayer
+        if not player or not player.Character or not player.Character:FindFirstChild("HumanoidRootPart") then
+            warn("LocalPlayer or HumanoidRootPart not found!")
+            return
+        end
+        -- gotta add setup function that teleports and interacts with all merchants
 
-        -- Fire the corresponding RemoteEvent for the nearest location
-        local world = workspace:WaitForChild("world")
-        local npcs = world:WaitForChild("npcs")
-        print("Searching for NPCs in world...")  -- Debugging step
-        local merchant = npcs:FindFirstChild(nearestLocation.remotePath)
+        local humanoidRootPart = player.Character.HumanoidRootPart
+        local currentPosition = humanoidRootPart.Position
 
-        if merchant then
-            print("Merchant found: " .. nearestLocation.remotePath)  -- Debugging step
-            local sellAllEvent = merchant:FindFirstChild("merchant"):FindFirstChild("sellall")
-            if sellAllEvent and sellAllEvent.InvokeServer then
-                print("Invoking sellAll event...")  -- Debugging step
-                sellAllEvent:InvokeServer()
-                print("Sold items at nearest location: " .. nearestLocation.name)
+        print("Current Position: " .. tostring(currentPosition))  -- Debugging step
+
+        -- Find the nearest location
+        local nearestLocation = nil
+        local shortestDistance = math.huge
+        print("Looking for nearest location...")  -- Debugging step
+
+        for _, location in ipairs(MerchantValues) do
+            local distance = getDistance(currentPosition, location.coords)
+            print("Checking location: " .. location.name .. " at distance: " .. distance)  -- Debugging step
+            if distance < shortestDistance then
+                shortestDistance = distance
+                nearestLocation = location
+            end
+        end
+
+        if nearestLocation then
+            print("Nearest location found: " .. nearestLocation.name)  -- Debugging step
+
+            -- Fire the corresponding RemoteEvent for the nearest location
+            local world = workspace:WaitForChild("world")
+            local npcs = world:WaitForChild("npcs")
+            print("Searching for NPCs in world...")  -- Debugging step
+            local merchant = npcs:FindFirstChild(nearestLocation.remotePath)
+
+            if merchant then
+                print("Merchant found: " .. nearestLocation.remotePath)  -- Debugging step
+                local sellAllEvent = merchant:FindFirstChild("merchant"):FindFirstChild("sellall")
+                if sellAllEvent and sellAllEvent.InvokeServer then
+                    print("Invoking sellAll event...")  -- Debugging step
+                    sellAllEvent:InvokeServer()
+                    print("Sold items at nearest location: " .. nearestLocation.name)
+                else
+                    warn("sellall event not found or invalid at: " .. nearestLocation.name)
+                end
             else
-                warn("sellall event not found or invalid at: " .. nearestLocation.name)
+                warn("Merchant NPC not found for: " .. nearestLocation.name)
             end
         else
-            warn("Merchant NPC not found for: " .. nearestLocation.name)
+            warn("No nearest location found!")
         end
-    else
-        warn("No nearest location found!")
     end
-end
 
 
---ADD AUTO SELL SECONDS
 -- // // // Main Tab // // // --
+
     local section = Tabs.Main:AddSection("Auto Fishing")
     local autoCast = Tabs.Main:AddToggle("autoCast", {Title = "Auto Cast", Default = false })
     autoCast:OnChanged(function()
@@ -662,61 +746,60 @@ end
             SellAll()
         end
     })
-
--- Create the Slider first to ensure its value can be accessed
-local Slider = Tabs.Auto:AddSlider("AutoSellDelay", {
-    Title = "Auto Sell Delay",
-    Description = "Set the delay inbetween each time selling",
-    Default = 120,
-    Min = 1,
-    Max = 600,
-    Rounding = 1,
-    Callback = function(Value)
-        print("Slider was changed:", Value)
-    end
-})
-
--- Handle the slider change event
-Slider:OnChanged(function(Value)
-    print("Slider changed:", Value)
-end)
-
--- Set the default value of the slider
-Slider:SetValue(3)
-
--- Create the Toggle
-local Toggle = Tabs.Auto:AddToggle("Autoselltoggle", {Title = "Auto Sell", Default = false })
-
--- Function to trigger SellAll after the delay set by the slider
-local function triggerSellAllAfterDelay(delay)
-    Fluent:Notify({
-        Title = "SellALl",
-        Content = "For this to work go to your nearest merchant and sell everything 1 time after that it will work until you rejoin",
-        Duration = 10 -- Set to nil to make the notification not disappear
+    local section = Tabs.Auto:AddSection("Sell")
+    local Slider = Tabs.Auto:AddSlider("AutoSellDelay", {
+        Title = "Auto Sell Delay",
+        Description = "Set the delay inbetween each time selling",
+        Default = 120,
+        Min = 1,
+        Max = 600,
+        Rounding = 1,
+        Callback = function(Value)
+            print("Slider was changed:", Value)
+        end
     })
-    while Toggle.Value do  -- While the toggle is ON
-        print("Waiting for", delay, "seconds...")
-        wait(delay)  -- Wait for the specified delay time
-        print("Triggering SellAll()...")
-        SellAll()  -- This will call the SellAll function
-    end
-end
 
--- Handle the toggle change event
-Toggle:OnChanged(function()
-    print("Toggle changed:", Toggle.Value)
-    if Toggle.Value then
-        print("Toggle is ON. Starting to trigger SellAll repeatedly with delay.")
-        local delay = Slider.Value  -- Get the slider value
-        print("Slider value (delay):", delay)
-        triggerSellAllAfterDelay(delay)  -- Start triggering SellAll repeatedly after the delay
-    else
-        print("Toggle is OFF. Stopping SellAll triggers.")
-    end
-end)
+    -- Handle the slider change event
+    Slider:OnChanged(function(Value)
+        print("Slider changed:", Value)
+    end)
 
--- Set the default value of the toggle
-Toggle:SetValue(false)
+    -- Set the default value of the slider
+    Slider:SetValue(120)
+
+    -- Create the Toggle
+    local Toggle = Tabs.Auto:AddToggle("Autoselltoggle", {Title = "Auto Sell", Default = false })
+
+    -- Function to trigger SellAll after the delay set by the slider
+    local function triggerSellAllAfterDelay(delay)
+        Fluent:Notify({
+            Title = "SellALl",
+            Content = "For this to work go to your nearest merchant and sell everything 1 time after that it will work until you rejoin",
+            Duration = 10 -- Set to nil to make the notification not disappear
+        })
+        while Toggle.Value do  -- While the toggle is ON
+            print("Waiting for", delay, "seconds...")
+            wait(delay)  -- Wait for the specified delay time
+            print("Triggering SellAll()...")
+            SellAll()  -- This will call the SellAll function
+        end
+    end
+
+    -- Handle the toggle change event
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Toggle.Value)
+        if Toggle.Value then
+            print("Toggle is ON. Starting to trigger SellAll repeatedly with delay.")
+            local delay = Slider.Value  -- Get the slider value
+            print("Slider value (delay):", delay)
+            triggerSellAllAfterDelay(delay)  -- Start triggering SellAll repeatedly after the delay
+        else
+            print("Toggle is OFF. Stopping SellAll triggers.")
+        end
+    end)
+
+    -- Set the default value of the toggle
+    Toggle:SetValue(false)
 -- // // // Treasure Tab // // // --
     local section = Tabs.Items:AddSection("Treasure")
     Tabs.Items:AddButton({
@@ -979,7 +1062,58 @@ Toggle:SetValue(false)
     end)
     
     Toggle:SetValue(false)
+    -- // ESP // --
+    local section = Tabs.Misc:AddSection("ESP")
+    local Toggle = Tabs.Misc:AddToggle("MyToggle", {Title = "Toggle", Default = false })
+
+    local espEnabled = Toggle.Value  -- Initial state based on the toggle
     
+    -- Function to create or remove ESP dynamically
+    local function updateESP()
+        if espEnabled then
+            -- Create ESP for all locations when the toggle is enabled
+            for name, data in pairs(locations) do
+                createBillboardGui(name, data.Position, data.Rotation)
+            end
+        else
+            -- Remove all existing ESPs when the toggle is disabled
+            for _, part in pairs(workspace:GetChildren()) do
+                if part:IsA("Part") and part.Name ~= "Baseplate" then
+                    part:Destroy()  -- Destroy all ESP parts
+                end
+            end
+        end
+    end
+    
+    Toggle:OnChanged(function()
+        espEnabled = Toggle.Value  -- Update the espEnabled state based on the toggle
+        print("Toggle changed:", espEnabled)
+        
+        updateESP()  -- Update the ESP based on the new toggle state
+    end) 
+    
+    -- Initial call to enable ESP at the start if espEnabled is true
+    if espEnabled then
+        updateESP()
+    end
+    
+    -- Continuous update to check distance if needed (this part can stay as is)
+    local player = game.Players.LocalPlayer
+    local position = Vector3.new(0, 0, 0)  -- Target position
+    local distanceLabel = script.Parent  -- Assuming the script is a child of a TextLabel
+    
+    spawn(function()
+        while true do
+            wait(1)  -- Update every second
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
+                distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
+            end
+        end
+    end)
+    
+    
+
     --remove fog
     local RemoveFog = Tabs.Misc:AddToggle("RemoveFog", {Title = "Remove Fog", Default = false })
     RemoveFog:OnChanged(function()
@@ -1007,6 +1141,7 @@ Toggle:SetValue(false)
 			end
         end
     end)
+    Options.MyToggle:SetValue(false)
     -- // Gameplay // --
     local section = Tabs.Misc:AddSection("Gameplay")
     -- instant interact
@@ -1020,6 +1155,21 @@ Toggle:SetValue(false)
             end
         end
     end)
+    
+    -- Use spawn to run the reset code in the background
+    spawn(function()
+        while true do
+            wait(60)  -- wait for 60 seconds (1 minute)
+            if Options.HoldDuration.Value == true then
+                for i,v in ipairs(game:GetService("Workspace"):GetDescendants()) do
+                    if v.ClassName == "ProximityPrompt" then
+                        v.HoldDuration = 0
+                    end
+                end
+            end
+        end
+    end)
+    
     --disable oxygen
     local DisableOxygen = Tabs.Misc:AddToggle("DisableOxygen", {Title = "Disable Oxygen", Default = true })
     DisableOxygen:OnChanged(function()
@@ -1030,10 +1180,45 @@ Toggle:SetValue(false)
         Title = "Copy XYZ",
         Description = "Copy Clipboard",
         Callback = function()
-            local XYZ = tostring(game.Players.LocalPlayer.Character.HumanoidRootPart.Position)
-            setclipboard("game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(" .. XYZ .. ")")
+-- Script to get LocalPlayer's position and rotation and copy it to the clipboard
+-- Ensure you have the proper permissions to use setclipboard (e.g., in a local plugin or certain executors)
+
+-- Services
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+if not LocalPlayer then
+    warn("LocalPlayer not found.")
+    return
+end
+
+local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Function to copy data to clipboard
+local function setClipboard(data)
+    if setclipboard then
+        setclipboard(data)
+        print("Data copied to clipboard:", data)
+    else
+        warn("setclipboard function is not available.")
+    end
+end
+
+-- Get position and rotation
+local position = humanoidRootPart.Position
+local rotation = humanoidRootPart.Rotation
+
+-- Format data as a single-line table
+local dataTable = string.format("{Position = Vector3.new(%f, %f, %f), Rotation = Vector3.new(%f, %f, %f)}", position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z)
+
+-- Copy to clipboard
+setClipboard(dataTable)
+
         end
     })
+
+
 -- // // //  Teleport // // //  --
 
     local locationNames = {}
@@ -1242,50 +1427,106 @@ Toggle:SetValue(false)
         local section = Tabs.Teleport:AddSection("Server")
 -- // // // Premium Autofish // // //   --
     -- need to add farm zones auto sell when not fishing, auto sell rariies, freeze position
-    local autofishEnabled = false -- Declare outside to persist toggle state
-    local ToggleAutofarm = Tabs.Auto:AddToggle("ToggleAutoFarm", {Title = "Fisch Autofarm", Default = false })
-    ToggleAutofarm:OnChanged(function(newState)
-        autofishEnabled = newState -- Update state dynamically
-        local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
-        
-        if autofishEnabled then
-            -- Start the autofishing loop in a coroutine
-            coroutine.wrap(function()
-                while autofishEnabled and task.wait() do
-                    if Backpack:FindFirstChild(RodName) then
-                        LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
-                    end
-                    if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
-                        local XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
-                        XyzClone.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
-                        XyzClone.Name = "Lure"
-                        XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
-                        repeat
-                            pcall(function()
-                                PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
-                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
-                                game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
-                            end)
-                            -- Fixed line with direct formatting
-                            XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
-                            RunService.Heartbeat:Wait()
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
-                        XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
-                        delay(1.5, function()
-                            XyzClone:Destroy()
-                        end)
-                        repeat
-                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
-                            task.wait(.5)
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
-                    else
-                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
-                        task.wait(2)
-                    end
-                end
-            end)()
-        end
+    -- Declare toggle state and location variables
+
+    local Locations = {
+        EXP = {Position = Vector3.new(-2675.331055, 164.795013, 1758.057129), Rotation = Vector3.new(0, 75.243, 0)},
+        Money = {Position = Vector3.new(890.312195, -737.915710, 1123.411865), Rotation = Vector3.new(0.000000, -1.344000, 0.000000)},
+        Event = {Position = Vector3.new(87.360214, 294.499969, -10303.833008), Rotation = Vector3.new(0, 0, 0)},
+        Ancient = {Position = Vector3.new(5805.021484, 135.301498, 405.922119), Rotation = Vector3.new(0, -42.669, 0)},
+        None = nil
+    }
+
+    local section = Tabs.Auto:AddSection("Farm")
+   
+    local autofishEnabled = false
+    local selectedLocation = "EXP" -- Default teleport location
+
+    -- Dropdown with teleport locations
+    local Dropdown = Tabs.Auto:AddDropdown("Dropdown", {
+        Title = "Teleport Location",
+        Values = {"EXP", "Money", "Event", "Ancient", "None"},
+        Multi = false,
+        Default = "EXP",
+    })
+
+    Dropdown:OnChanged(function(newValue)
+        selectedLocation = newValue 
     end)
+
+    -- Location data
+   -- Autofarm toggle
+local ToggleAutofarm = Tabs.Auto:AddToggle("ToggleAutoFarm", {Title = "Fish Autofarm", Default = false})
+
+ToggleAutofarm:OnChanged(function(newState)
+    autofishEnabled = newState -- Update state dynamically
+    local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+
+    if autofishEnabled then
+        -- Teleport to the selected location (both Position and Rotation)
+        if Locations[selectedLocation] then
+            local location = Locations[selectedLocation]
+            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(location.Position) * CFrame.Angles(math.rad(location.Rotation.X), math.rad(location.Rotation.Y), math.rad(location.Rotation.Z))
+        end
+
+        -- Start the autofishing loop in a coroutine
+        coroutine.wrap(function()
+            local XyzClone
+            while autofishEnabled and task.wait() do
+                -- Equip the fishing rod
+                if Backpack:FindFirstChild(RodName) then
+                    LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+                end
+
+                if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
+                    -- Ensure only one XyzClone exists
+                    if not XyzClone then
+                        XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
+                        XyzClone.Parent = PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
+                        XyzClone.Name = "Lure"
+                    end
+
+                    XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+                    repeat
+                        pcall(function()
+                            PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+                            game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
+                        end)
+
+                        -- Update lure percentage
+                        XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
+                        RunService.Heartbeat:Wait()
+                    until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
+
+                    XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
+                    delay(1.5, function()
+                        if XyzClone then
+                            XyzClone:Destroy()
+                            XyzClone = nil
+                        end
+                    end)
+
+                    repeat
+                        ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
+                        task.wait(0.5)
+                    until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
+                else
+                    LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
+                    task.wait(2)
+                end
+            end
+
+            -- Clean up XyzClone when loop exits
+            if XyzClone then
+                XyzClone:Destroy()
+                XyzClone = nil
+            end
+        end)()
+    end
+end)
+
+
 -- // // // Load Scripts // // // --
     Tabs.Executor:AddButton({
         Title = "Speed Hub X",
@@ -1368,7 +1609,8 @@ Toggle:SetValue(false)
                         { name = 'C$ - Money💸', value = '```' .. MoneyPlayer .. '```', inline = true },
                         { name = 'Fishing Level🎣', value = '```' .. LvlPlayer .. '```', inline = true },
                         { name = '', value = '', },
-                        { name = 'Current Local Time', value = formattedLocalTime },
+                        { name = 'XP Since started', value = "twenty five"},
+                        { name = 'XP Since last hook', value = "five" },
                     },
                     timestamp = os.date('!%Y-%m-%dT%H:%M:%SZ', OSTime),
                 }
@@ -1459,3 +1701,4 @@ Toggle:SetValue(false)
     -- You can use the SaveManager:LoadAutoloadConfig() to load a config
     -- which has been marked to be one that auto loads!
     SaveManager:LoadAutoloadConfig()
+    --hi git
