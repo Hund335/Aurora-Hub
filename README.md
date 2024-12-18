@@ -1,6 +1,6 @@
 # 🎣 Welcome to the Aurora Hub | Fisch GitHub Repository.
 
-## ⚡Features:
+## ⚡Features
 - Very Fast Autofarm
 - Farm At Location
 - Teleport to Player
@@ -12,7 +12,7 @@
 - Nice UI
 - Built in script executor
   
-## Compatibility
+## 🔌Compatibility
 * Xeno
 * Swift
 * Delta
