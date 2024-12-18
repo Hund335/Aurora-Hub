@@ -32,3 +32,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/Hund335/Aurora-Hub/re
 ```
 
 Credits To me i guess
+If there are bugs or you have features you want added message me on Discord | Hund335
