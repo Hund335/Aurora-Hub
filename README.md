@@ -10,11 +10,20 @@
 - Statistics Window
 - Advanced Webhook
 - Nice UI
+- Built in script executor
   
 ## Compatibility
 * Xeno
 * Swift
 * Delta
+
+## Planned Features
+* Player ESP
+* Auto Totem
+* Auto Trade
+* Making Autofarm more reliable
+* Discord
+* Fixing Bugs
   
 ### Paste This into your Executor
 ```
