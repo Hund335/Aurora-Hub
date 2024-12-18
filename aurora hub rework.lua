@@ -290,6 +290,7 @@ end
         {name = "desolate Deep", coords = Vector3.new(-1655, -213, -2846), remotePath = "Mel Merchant"},
         {name = "sunstone Island", coords = Vector3.new(-933, 131, -1119), remotePath = "Max Merchant"},
         {name = "snowcap", coords = Vector3.new(2649, 142, 2521), remotePath = "Mike Merchant"},
+	-- add merchant for christmas event 
     }
 -- // // // Variables // // // --
     local CastMode = "Blatant"
@@ -316,11 +317,13 @@ end
         Executor = Window:AddTab({ Title = "Executor", Icon = "scroll-text" }),
         Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
         Info = Window:AddTab({ Title = "Info", Icon = "info" }),
+	-- add stats tab
         }
 
     local Options = Fluent.Options
 
 -- // // // Auto Cast // // // --
+-- probably remove this as its not needed and kind of slow same with autoshake
     local autoCastEnabled = false
     local function autoCast()
         if LocalCharacter then
@@ -542,7 +545,7 @@ end
     --sunstone workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Max Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
     --snowcap workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mike Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
 
-
+-- need to fix teleport to merchant for 1st time
     function SellHand()
             local currentPosition = HumanoidRootPart.CFrame
             local sellPosition = CFrame.new(464, 151, 232)
@@ -623,7 +626,7 @@ end
 
 
 -- // // // Main Tab // // // --
-
+-- delete most of this 
     local section = Tabs.Main:AddSection("Auto Fishing")
     local autoCast = Tabs.Main:AddToggle("autoCast", {Title = "Auto Cast", Default = false })
     autoCast:OnChanged(function()
@@ -827,6 +830,8 @@ end
                     v.HoldDuration = 0
                 end
             end
+
+	-- look into this looks useful to fire proximity event 
             for i, v in pairs(workspace.world.chests:GetDescendants()) do
                 if v:IsA("Part") and v:FindFirstChild("ChestSetup") then 
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
