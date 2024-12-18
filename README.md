@@ -18,6 +18,7 @@
 * Delta
 
 ## Planned Features
+* Making Closing the script delete all the things done by it like added ui
 * Player ESP
 * Auto Totem
 * Auto Trade
