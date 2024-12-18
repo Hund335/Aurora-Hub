@@ -1,17 +1,17 @@
 # 🎣 Welcome to the Aurora Hub | Fisch GitHub Repository.
 
 ## ⚡Features
-- Very Fast Autofarm
-- Farm At Location
-- Teleport to Player
-- Teleport to Location
-- Auto Sell Anywhere
-- Sell Anywhere
-- Statistics Window
-- Advanced Webhook
-- Nice UI
-- Built in script executor
-  
+  - Very Fast Autofarm
+  - Farm At Location
+  - Teleport to Player
+  - Teleport to Location
+  - Auto Sell Anywhere
+  - Sell Anywhere
+  - Statistics Window
+  - Advanced Webhook
+  - Nice UI
+  - Built in script executor
+    
 ## 🔌Compatibility
 * Xeno
 * Swift
