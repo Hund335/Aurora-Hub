@@ -23,6 +23,7 @@
 * Auto Totem
 * Auto Trade
 * Making Autofarm more reliable
+* Performance increasing Features
 * Discord
 * Fixing Bugs
   
