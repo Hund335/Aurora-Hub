@@ -1,7 +1,7 @@
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
-local ScriptVersion = "1.0"
+local ScriptVersion = "1.1.2"
 local Window = Fluent:CreateWindow({
     Title = "Aurora Hub " .. ScriptVersion,
     SubTitle = "by Hund335",
@@ -314,7 +314,7 @@ end
 -- // // // FUNCTIONS // // // --
 
 function AntiAfk2()
-    spawn(function()
+    task.spawn(function()
         while AntiAfk do
             game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("afk"):FireServer(false)
             task.wait(0.01)
@@ -1155,14 +1155,15 @@ AntiAfk2()
     local position = Vector3.new(0, 0, 0)  -- Target position
     local distanceLabel = script.Parent  -- Assuming the script is a child of a TextLabel
 
-    spawn(function()
-        while true do
-            wait(1)  -- Update every second
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
-                distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
-            end
+    local function updateDistanceLabel()
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
+            distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
         end
+    end
+
+    spawn(function()
+        RunService.Heartbeat:Connect(updateDistanceLabel)
     end)
 
 
@@ -1601,9 +1602,10 @@ AntiAfk2()
                         -- Check if lure value changes within 30 seconds
                         coroutine.wrap(function()
                             local initialLureValue = lureValue
-                            task.wait(30)
+                            task.wait(15)
                             if lureValue == initialLureValue then
                                 lureChanged = false
+                                LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(100)
                             else
                                 lureChanged = true
                             end
@@ -1647,6 +1649,7 @@ AntiAfk2()
             end)()
         end
     end)
+
     Tabs.Executor:AddButton({
         Title = "Speed Hub X",
         Description = "Open Speed Hub X",
@@ -1701,7 +1704,7 @@ AntiAfk2()
         end
     })
 -- // // // Webhook // // //
-
+--need
 -- // // // SERVICES // // // --
     -- Addons:
     -- SaveManager (Allows you to have a configuration system)
