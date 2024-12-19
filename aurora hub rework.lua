@@ -214,7 +214,7 @@ end
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125)},
         {name = "ancient", coords = Vector3.new(5803.2783203125, 135.30149841308594, 407.7121887207031)},
         {name = "forsaken shores", coords = Vector3.new(-2675.330078125, 164.75064086914062, 1758.0570068359375)},
-        {name = "enchant", coords = Vector3.new(1296, -805, -299)},
+        {name = "enchant", coords = Vector3.new(1310.264404, -805.292236, -99.972527)},
         {name = "terapin", coords = Vector3.new(-143, 145, 1909)},
         {name = "Crafting", coords = Vector3.new(-3160, -745, 1684)},
         {name = "roslit", coords = Vector3.new(-1476, 133, 671)},
@@ -229,29 +229,19 @@ end
         {name = "Vertigo", coords = Vector3.new(-110, -515, 1150)},
         {name = "mushgrove", coords = Vector3.new(2501, 131, -720)},
         {name = "Fischmas 2024", coords = Vector3.new(87.36021423339844, 294.5, -10303.8330078125)},
+        {name = "Fischmas City", coords = Vector3.new(25.335494995117188, 364.6358337402344, -9582.0400390625)}
         }
 
     --Item Values
     local ItemValues = {
-        {name = "Training_Rod", coords = Vector3.new(457.693848, 148.357529, 230.414307)},
-        {name = "Plastic_Rod", coords = Vector3.new(454.425385, 148.169739, 229.172424)},
-        {name = "Lucky_Rod", coords = Vector3.new(446.085999, 148.253006, 222.160004)},
-        {name = "Kings_Rod", coords = Vector3.new(1375.57642, -810.201721, -303.509247)},
-        {name = "Flimsy_Rod", coords = Vector3.new(471.107697, 148.36171, 229.642441)},
-        {name = "Nocturnal_Rod", coords = Vector3.new(-141.874237, -515.313538, 1139.04529)},
-        {name = "Fast_Rod", coords = Vector3.new(447.183563, 148.225739, 220.187454)},
-        {name = "Carbon_Rod", coords = Vector3.new(454.083618, 150.590073, 225.328827)},
-        {name = "Long_Rod", coords = Vector3.new(485.695038, 171.656326, 145.746109)},
-        {name = "Mythical_Rod", coords = Vector3.new(389.716705, 132.588821, 314.042847)},
-        {name = "Midas_Rod", coords = Vector3.new(401.981659, 133.258316, 326.325745)},
-        {name = "Trident_Rod", coords = Vector3.new(-1484.34192, -222.325562, -2194.77002)},
-        {name = "Enchated_Altar", coords = Vector3.new(1310.54651, -799.469604, -82.7303467)},
-        {name = "Bait_Crate", coords = Vector3.new(384.575134, 135.351928, 337.534027)},
-        {name = "Quality_Bait_Crate", coords = Vector3.new(-177.876, 144.472, 1932.844)},
-        {name = "Crab_Cage", coords = Vector3.new(474.803589, 149.664566, 229.49469)},
-        {name = "GPS", coords = Vector3.new(517.896729, 149.217636, 284.856842)},
-        {name = "Basic_Diving_Gear", coords = Vector3.new(369.174774, 132.508835, 248.705368)},
-        {name = "Fish_Radar", coords = Vector3.new(365.75177, 134.50499, 274.105804)},
+        {name = "Bait Crate" , coords = Vector3.new(383.891144, 136.994125, 333.777832)},
+        {name = "Quality Bait Crate" , coords = Vector3.new(-174.103439, 143.167511, 1931.018066)},
+        {name = "Crab Cage" , coords = Vector3.new(474.081421, 150.500000, 233.840317)},
+        {name = "GPS" , coords = Vector3.new(518.683594, 150.477036, 282.772186)},
+        {name = "Radar" , coords = Vector3.new(365.751770, 137.000015, 274.103027)},
+        {name = "Basic Diving gear" , coords = Vector3.new(369.762268, 134.456268, 248.701965)},
+        {name = "Advanced Diving gear" , coords = Vector3.new(nil, nil, nil)},
+        {name = "Tidebreaker" , coords = Vector3.new(nil, nil, nil)}
         }
 
     --NPC Values
@@ -280,7 +270,16 @@ end
     {name = "Ashe", coords = Vector3.new(-1709.94055, 149.862411, 729.399536)},
     {name = "Alfredrickus", coords = Vector3.new(-1520.60632, 142.923264, 764.522034)},
     }
-    
+
+    local TotemValues = { 
+        {name = "Aurora", coords = Vector3.new(-1811, -136, -3282)},
+        {name = "Smokescreen", coords = Vector3.new(2789, 139, -625)},
+        {name = "Windset", coords = Vector3.new(2849, 178, 2702)},
+        {name = "Tempest", coords = Vector3.new(35, 132, 1943)},
+        {name = "Sundial", coords = Vector3.new(-1148, 134, -1075)},
+        {name = "Eclipse", coords = Vector3.new(5968, 273, 838)},
+        {name = "Meteor", coords = Vector3.new(-1948, 275, 230)}
+    }
     local MerchantValues = {
         {name = "moosewood", coords = Vector3.new(470, 150, 260), remotePath = "Marc Merchant"},
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125), remotePath = "Milo Merchant"},
@@ -313,19 +312,14 @@ end
         Player = Window:AddTab({ Title = "Player", Icon = "person-standing" }),
         Auto = Window:AddTab({ Title = "Automatically", Icon = "computer" }),
         Misc = Window:AddTab({ Title = "Misc", Icon = "circle-ellipsis" }),
-        Webhook = Window:AddTab({ Title = "Webhook", Icon = "database" }),
+        --Webhook = Window:AddTab({ Title = "Webhook", Icon = "database" }),
         Executor = Window:AddTab({ Title = "Executor", Icon = "scroll-text" }),
         Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
-        Info = Window:AddTab({ Title = "Info", Icon = "info" }),
+        --Info = Window:AddTab({ Title = "Info", Icon = "info" }),
 	-- add stats tab
         }
 
     local Options = Fluent.Options
-
--- // // // Auto Cast // // // --
--- probably remove this as its not needed and kind of slow same with autoshake
-
-
 -- // // // Noclip // // // --
     NoclipConnection = RunService.Stepped:Connect(function()
         if Noclip == true then
@@ -984,6 +978,10 @@ setClipboard(dataTable)
     for _, npc in ipairs(NPCValues) do
         table.insert(NPCNames, npc.name)
     end
+    local TotemNames = {}
+    for _, totem in ipairs(TotemValues) do
+        table.insert(TotemNames, totem.name)
+    end
         --/// /// Locations /// /// --
         local section = Tabs.Teleport:AddSection("Locations")
         -- Create the dropdown menu
@@ -1070,9 +1068,53 @@ setClipboard(dataTable)
                 else
                     warn("No location selected")
                 end
+          
             end,
         })
+        --/// /// TOTEMS /// /// --
+        local section = Tabs.Teleport:AddSection("Totems")
+        -- Create the dropdown menu
+        local Dropdown = Tabs.Teleport:AddDropdown("TotemDropdown", {
+            Title = "Select a Totem",
+            Values = TotemNames,  -- Corrected from TotemValues to TotemNames
+            Multi = false,
+            Default = 1,
+        })
 
+        -- Add the teleport button
+        Tabs.Teleport:AddButton({
+            Title = "Teleport",
+            Description = "Teleport to the selected Totem",
+            Callback = function()
+                -- Get the selected location name
+                local selectedTotemName = Dropdown.Value
+                if selectedTotemName then
+                    -- Find the location in LocationValues by name
+                    local selectedTotem
+                    for _, location in ipairs(TotemValues) do
+                        if location.name == selectedTotemName then
+                            selectedTotem = location
+                            break
+                        end
+                    end
+
+                    -- If a valid location was found
+                    if selectedTotem and game.Players.LocalPlayer.Character then
+                        local character = game.Players.LocalPlayer.Character
+                        if character:FindFirstChild("HumanoidRootPart") then
+                            -- Teleport the player to the selected location's coordinates
+                            character.HumanoidRootPart.CFrame = CFrame.new(selectedTotem.coords)
+                        else
+                            warn("HumanoidRootPart not found in the character")
+                        end
+                    else
+                        warn("Location not found or player character missing")
+                    end
+                else
+                    warn("No location selected")
+                end
+            end,
+        })
         --/// /// NPCS /// /// --
         local section = Tabs.Teleport:AddSection("NPCs")
         -- Create the dropdown menu
