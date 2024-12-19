@@ -7,8 +7,6 @@
   - Teleport to Location
   - Auto Sell Anywhere
   - Sell Anywhere
-  - Statistics Window
-  - Advanced Webhook
   - Nice UI
   - Built in script executor
     
@@ -24,6 +22,8 @@
 * Auto Trade
 * Making Autofarm more reliable
 * Performance increasing Features
+* Statistics Tab
+* Advanced Webhook
 * Discord
 * Fixing Bugs
   
