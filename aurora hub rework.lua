@@ -1632,11 +1632,11 @@ AntiAfk2()
                         end)
 
                         repeat
-                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
+                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000, true)
                             task.wait(0.5)
                         until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
                     else
-                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(100)
+                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000)
                         task.wait(2)
                     end
                 end
