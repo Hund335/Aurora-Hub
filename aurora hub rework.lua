@@ -48,6 +48,8 @@ local Window = Fluent:CreateWindow({
 --workspace.world.npcs.Appraiser.dialogprompt.MaxActivationDistance = 7000000000
 --workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Appraiser"):WaitForChild("appraiser"):WaitForChild("appraise"):InvokeServer()
 
+local AntiAfk = true -- Initialize the AntiAfk variable
+
 function AntiAfk2()
     spawn(function()
         while AntiAfk do
@@ -55,7 +57,44 @@ function AntiAfk2()
             task.wait(0.01)
         end
     end)
-end      
+end
+
+AntiAfk2()
+
+local UserInputService = game:GetService("UserInputService")
+
+function pressLKey()
+    spawn(function()
+        while true do
+            -- Simulate pressing the "L" key
+            local UserInputService = game:GetService("UserInputService")
+
+            -- Define the action you want to perform when the "L" key is pressed
+            local function performAction()
+                print("Action performed as if L key was pressed")
+                -- Add your logic here
+            end
+
+            -- Connect the action to the actual "L" key press
+            UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
+                if not gameProcessedEvent then
+                    if input.KeyCode == Enum.KeyCode.L then
+                        performAction()
+                    end
+                end
+            end)
+
+            -- Simulate the "L" key press by directly calling the function
+            performAction()
+                        -- Wait for 5 seconds before pressing again
+            task.wait(120)
+        end
+    end)
+end
+
+-- Call the function to start pressing "L" every 5 seconds
+pressLKey()
+
 -- this is for esp ig 
 local function createBillboardGui(locationName, position, rotation)
     -- Create a part to attach the BillboardGui
@@ -103,6 +142,7 @@ local function createBillboardGui(locationName, position, rotation)
 
     -- Create another text label for the distance
     local distanceLabel = Instance.new("TextLabel")
+    distanceLabel.Text = "[" .. "NOT DEFINED" .. "]"
     distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Take up the other half of the BillboardGui
     distanceLabel.BackgroundTransparency = 1
     distanceLabel.TextColor3 = Color3.new(0, 0, 1)  -- Blue color
@@ -138,7 +178,7 @@ do
         UserInputService = game:GetService("UserInputService")
 
 	-- \\ Normal Module // --
-    --no fucking clue what this does
+    --no fucking clue what this does but if i remove it the script breaks
     request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (function()
         error("No compatible request function found.")
     end)
@@ -180,8 +220,6 @@ end
     local screenGui = Instance.new("ScreenGui", PlayerGui)
     local RenderStepped = RunService.RenderStepped
     local WaitForSomeone = RenderStepped.Wait
-    local AntiAfk = true
-
 
 -- // // // Location Tables // // // --
     -- Location Values
@@ -845,19 +883,21 @@ end
     -- Continuous update to check distance if needed (this part can stay as is)
     local player = game.Players.LocalPlayer
     local position = Vector3.new(0, 0, 0)  -- Target position
-    local distanceLabel = script.Parent  -- Assuming the script is a child of a TextLabel
     
     spawn(function()
-        while true do
-            wait(1)  -- Update every second
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
-                distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
+        local success, errorMessage = pcall(function()
+            while true do
+                wait(1)  -- Update every second
+                if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                    local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
+                    distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
+                end
             end
+        end)
+        if not success then
+            print("Error: " .. errorMessage)
         end
     end)
-    
-    
 
     --remove fog
     local RemoveFog = Tabs.Misc:AddToggle("RemoveFog", {Title = "Remove Fog", Default = false })
@@ -925,43 +965,43 @@ end
         Title = "Copy XYZ",
         Description = "Copy Clipboard",
         Callback = function()
--- Script to get LocalPlayer's position and rotation and copy it to the clipboard
--- Ensure you have the proper permissions to use setclipboard (e.g., in a local plugin or certain executors)
+    -- Script to get LocalPlayer's position and rotation and copy it to the clipboard
+    -- Ensure you have the proper permissions to use setclipboard (e.g., in a local plugin or certain executors)
 
--- Services
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
+    -- Services
+    local Players = game:GetService("Players")
+    local LocalPlayer = Players.LocalPlayer
 
-if not LocalPlayer then
-    warn("LocalPlayer not found.")
-    return
-end
-
-local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
--- Function to copy data to clipboard
-local function setClipboard(data)
-    if setclipboard then
-        setclipboard(data)
-        print("Data copied to clipboard:", data)
-    else
-        warn("setclipboard function is not available.")
+    if not LocalPlayer then
+        warn("LocalPlayer not found.")
+        return
     end
-end
 
--- Get position and rotation
-local position = humanoidRootPart.Position
-local rotation = humanoidRootPart.Rotation
+    local character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 
--- Format data as a single-line table
-local dataTable = string.format("{Position = Vector3.new(%f, %f, %f), Rotation = Vector3.new(%f, %f, %f)}", position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z)
-
--- Copy to clipboard
-setClipboard(dataTable)
-
+    -- Function to copy data to clipboard
+    local function setClipboard(data)
+        if setclipboard then
+            setclipboard(data)
+            print("Data copied to clipboard:", data)
+        else
+            warn("setclipboard function is not available.")
         end
-    })
+    end
+
+    -- Get position and rotation
+    local position = humanoidRootPart.Position
+    local rotation = humanoidRootPart.Rotation
+
+    -- Format data as a single-line table
+    local dataTable = string.format("{Position = Vector3.new(%f, %f, %f), Rotation = Vector3.new(%f, %f, %f)}", position.X, position.Y, position.Z, rotation.X, rotation.Y, rotation.Z)
+
+    -- Copy to clipboard
+    setClipboard(dataTable)
+
+            end
+        })
 
 
 -- // // //  Teleport // // //  --
