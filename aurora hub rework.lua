@@ -92,14 +92,6 @@ local function createBillboardGui(locationName, position, rotation)
     textLabel.Font = Enum.Font.GothamBold  -- Set the font to Gotham Bold
     textLabel.Parent = frame
 
-    -- Create another text label for the distance
-    local distanceLabel = Instance.new("TextLabel")
-    distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Take up the other half of the BillboardGui
-    distanceLabel.BackgroundTransparency = 1
-    distanceLabel.TextColor3 = Color3.new(0, 0, 1)  -- Blue color
-    distanceLabel.TextScaled = true  -- Keep the text scaled proportionally
-    distanceLabel.Font = Enum.Font.Gotham  -- Set the font to Gotham
-    distanceLabel.Parent = frame
 end
 
 do
@@ -574,6 +566,9 @@ AntiAfk2()
         if nearestMerchant then
             -- Check if the player has already visited this merchant
             if not visitedMerchants[nearestMerchant.name] then
+                -- Store the original position before teleporting to the merchant
+                local originalPosition = player.Character.HumanoidRootPart.Position
+
                 -- First-time visit, teleport to the merchant
                 print("Teleporting to", nearestMerchant.name)
                 local rootPart = player.Character.HumanoidRootPart
@@ -591,7 +586,6 @@ AntiAfk2()
                 task.wait(3)
 
                 -- Teleport back to the original position (you can customize the position as needed)
-                local originalPosition = player.Character.HumanoidRootPart.Position
                 rootPart.CFrame = CFrame.new(originalPosition)
                 print("Teleported back to original position")
             else
@@ -902,21 +896,7 @@ AntiAfk2()
         updateESP()
     end
 
-    -- Continuous update to check distance if needed (this part can stay as is)
-    local player = game.Players.LocalPlayer
-    local position = Vector3.new(0, 0, 0)  -- Target position
-    local distanceLabel = script.Parent  -- Assuming the script is a child of a TextLabel
 
-    local function updateDistanceLabel()
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
-            distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
-        end
-    end
-
-    spawn(function()
-        RunService.Heartbeat:Connect(updateDistanceLabel)
-    end)
 
 
 
