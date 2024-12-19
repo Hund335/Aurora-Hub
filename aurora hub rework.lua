@@ -1580,7 +1580,7 @@ AntiAfk2()
             -- Start the autofishing loop in a coroutine
             coroutine.wrap(function()
                 local XyzClone
-                while autofishEnabled and task.wait() do
+                while autofishEnabled and task.wait(0.1) do
                     -- Equip the fishing rod
                     if Backpack:FindFirstChild(RodName) then
                         LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
@@ -1595,6 +1595,20 @@ AntiAfk2()
                         end
 
                         XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+                        local lureChanged = false
+                        local lureValue = LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value
+
+                        -- Check if lure value changes within 30 seconds
+                        coroutine.wrap(function()
+                            local initialLureValue = lureValue
+                            task.wait(30)
+                            if lureValue == initialLureValue then
+                                lureChanged = false
+                            else
+                                lureChanged = true
+                            end
+                        end)()
+
                         repeat
                             pcall(function()
                                 PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
@@ -1605,7 +1619,7 @@ AntiAfk2()
                             -- Update lure percentage
                             XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
                             RunService.Heartbeat:Wait()
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
+                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled or lureChanged
 
                         XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
                         delay(1.5, function()
@@ -1616,11 +1630,11 @@ AntiAfk2()
                         end)
 
                         repeat
-                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
+                            ReplicatedStorage.events.reelfinished:FireServer(100, true)
                             task.wait(0.5)
                         until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
                     else
-                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
+                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(100)
                         task.wait(2)
                     end
                 end
@@ -1633,9 +1647,6 @@ AntiAfk2()
             end)()
         end
     end)
-
-
--- // // // Load Scripts // // // --
     Tabs.Executor:AddButton({
         Title = "Speed Hub X",
         Description = "Open Speed Hub X",
@@ -1690,136 +1701,7 @@ AntiAfk2()
         end
     })
 -- // // // Webhook // // //
-function sendEmbed(embed)
-    local data = {
-        embeds = {embed}
-    }
-    local jsonData = HttpService:JSONEncode(data)
-    
-    HttpService:PostAsync(webhookURL, jsonData, Enum.HttpContentType.ApplicationJson)
-end
 
-function WebhookManager()
-    spawn(function()
-        local WebhookLog = true  -- Example, you should define this elsewhere
-        local WebhookDelay = 60 -- Delay in seconds between webhook sends
-        local ExpStat = game.Players.LocalPlayer.leaderstats.Level -- Example
-        local MoneyStat = game.Players.LocalPlayer.leaderstats["C$"] -- Example
-        
-        while WebhookLog do
-            task.wait(WebhookDelay)
-            
-            local OSTime = os.time()
-            local playerLocalTime = os.date('*t', OSTime)
-            local formattedLocalTime = string.format('%02d:%02d:%02d',
-                                                     playerLocalTime.hour,
-                                                     playerLocalTime.min,
-                                                     playerLocalTime.sec)
-            
-            local player = game.Players.LocalPlayer
-            local playerUserId = player.UserId
-            local playerProfileUrl = "https://www.roblox.com/users/" .. playerUserId .. "/profile"
-            local MoneyPlayer = MoneyStat.Value
-            local LvlPlayer = game.Players.LocalPlayer.leaderstats.Level.Value
-            local ExpPlayer = ExpStat.Value
-            
-            -- Tracking changes
-            local initialMoney = MoneyPlayer
-            local initialExp = ExpPlayer
-            local expGainedLastMinute, moneyDifference, expGainedLastHour
-            
-            -- Calculate Money Gained in Last 30 Minutes
-            spawn(function()
-                task.wait(1800)
-                local finalMoney = MoneyStat.Value
-                moneyDifference = finalMoney - initialMoney
-            end)
-            
-            -- Calculate Experience Gained in Last Hour
-            spawn(function()
-                task.wait(3600)
-                local finalExpHour = ExpStat.Value
-                expGainedLastHour = finalExpHour - initialExp
-            end)
-            
-            -- Calculate Experience Gained in Last Minute
-            spawn(function()
-                local initialExpMinute = ExpStat.Value
-                task.wait(60)
-                local finalExpMinute = ExpStat.Value
-                expGainedLastMinute = finalExpMinute - initialExpMinute
-            end)
-            
-            -- Embed Construction
-            local Embed = {
-                title = "Aurora Hub",
-                color = 0x34eb9b,
-                fields = {
-                    {name = "Player Profile", value = playerProfileUrl, inline = false},
-                    {name = "C$ - Money 💸", value = "```" .. MoneyPlayer .. "```", inline = true},
-                    {name = "Fishing Level 🎣", value = "```" .. LvlPlayer .. "```", inline = true},
-                    {name = "Total Exp", value = "```" .. ExpPlayer .. "```", inline = false},
-                    {name = "Exp Gained in the Last Minute", value = "```" .. (expGainedLastMinute or 0) .. "```", inline = false},
-                    {name = "Money Gained in the Last 30 Minutes", value = "```" .. (moneyDifference or 0) .. "```", inline = false},
-                    {name = "Exp Gained in the Last Hour", value = "```" .. (expGainedLastHour or 0) .. "```", inline = false},
-                },
-                timestamp = os.date("!%Y-%m-%dT%H:%M:%SZ", OSTime),
-            }
-            
-            -- Send the Embed
-            sendEmbed(Embed)
-        end
-    end)
-end
-
-                local success, response = pcall(function()
-                    return (syn and syn.request or http_request) {
-                        Url = WebhookUrl,
-                        Method = 'POST',
-                        Headers = { ['Content-Type'] = 'application/json' },
-                        Body = game:GetService('HttpService'):JSONEncode({
-                            username = 'Aurora Hub| Fisch',
-                            avatar_url = 'https://cdn.discordapp.com/attachments/1316902587940864082/1316902641913036880/Screenshot_2-removebg-preview.png?ex=675cbca8&is=675b6b28&hm=b890f15ab083248efe6e70f89806438656d2ed225dd614d521cb7ffe43d10213&',
-                            embeds = { Embed }
-                        }),
-                    }
-                end)
-
-
-    local section = Tabs.Webhook:AddSection("Webhook Stats Messages")
-    local InputWebhook = Tabs.Webhook:AddInput("InputWebhook", {
-        Title = "Webhook Url",
-        Default = "https://discord.com/api/webhooks/1314734774371352696/f1_OPDu23bzq_jU59Shl2IOVKyxqasRlk0n27fVbJ6Pbj3MyeKcffNfLvrdtvAY07oGk",
-        Placeholder = "URL",
-        Numeric = false,
-        Finished = false,
-        Callback = function(Value)
-            WebhookUrl = Value
-        end
-    })
-    InputWebhook:OnChanged(function()
-        print("Url Changed:", InputWebhook.Value)
-    end)
-    local SliderWebhook = Tabs.Webhook:AddSlider("SliderWebhook", {
-        Title = "Send Messages every ? seconds",
-        Description = "Prefer 60 seconds",
-        Default = 60,
-        Min = 1,
-        Max = 600,
-        Rounding = 5,
-        Callback = function(Value)
-            WebhookDelay = Value
-        end
-    })
-    SliderWebhook:OnChanged(function(Value)
-        print("Delay changed:", Value)
-    end)
-
-    local ToggleWebhook = Tabs.Webhook:AddToggle("ToggleWebhook", {Title = "Webhook On/Off", Default = false })
-    ToggleWebhook:OnChanged(function()
-        WebhookLog = ToggleWebhook.Value
-        WebhookManager()
-    end)
 -- // // // SERVICES // // // --
     -- Addons:
     -- SaveManager (Allows you to have a configuration system)
