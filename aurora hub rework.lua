@@ -193,49 +193,41 @@ end
     }
 
     local LocationValues = {
-        {name = "moosewood", coords = Vector3.new(470, 150, 260)},
-        {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125)},
-        {name = "ancient", coords = Vector3.new(5803.2783203125, 135.30149841308594, 407.7121887207031)},
-        {name = "forsaken shores", coords = Vector3.new(-2675.330078125, 164.75064086914062, 1758.0570068359375)},
-        {name = "enchant", coords = Vector3.new(1296, -805, -299)},
-        {name = "terapin", coords = Vector3.new(-143, 145, 1909)},
-        {name = "Crafting", coords = Vector3.new(-3160, -745, 1684)},
-        {name = "roslit", coords = Vector3.new(-1476, 133, 671)},
-        {name = "desolate Deep", coords = Vector3.new(-1655, -213, -2846)},
-        {name = "sunstone Island", coords = Vector3.new(-933, 131, -1119)},
-        {name = "brine pool", coords = Vector3.new(-1794, -143, -3302)},
-        {name = "spike", coords = Vector3.new(-1254, 137, 1555)},
-        {name = "statue of Skibidi", coords = Vector3.new(73, 141, -1028)},
-        {name = "Arch", coords = Vector3.new(999, 131, -1237)},
-        {name = "snowcap", coords = Vector3.new(2649, 142, 2521)},
-        {name = "Volcano", coords = Vector3.new(-1908, 164, 310)},
-        {name = "Vertigo", coords = Vector3.new(-110, -515, 1150)},
-        {name = "mushgrove", coords = Vector3.new(2501, 131, -720)},
-        {name = "Fischmas 2024", coords = Vector3.new(87.36021423339844, 294.5, -10303.8330078125)},
+        ["Moosewood"] = {Position = Vector3.new(470.000000, 150.935791, 260.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["The Depths"] = {Position = Vector3.new(853.240295, -740.365906, 1335.115723), Rotation = Vector3.new(180.000000, 55.258999, 180.000000)},
+        ["Ancient Isles"] = {Position = Vector3.new(5805.021484, 135.301498, 405.922119), Rotation = Vector3.new(0.000000, -42.668999, 0.000000)},
+        ["Forsaken Shores"] = {Position = Vector3.new(-2675.331055, 164.795013, 1758.057129), Rotation = Vector3.new(0.000000, 75.242996, 0.000000)},
+        ["Enchant"] = {Position = Vector3.new(1310.264404, -805.292236, -99.972527), Rotation = Vector3.new(180.000000, -1.252000, 180.000000)},
+        ["Terapin"] = {Position = Vector3.new(-143.000000, 145.072601, 1909.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Crafting"] = {Position = Vector3.new(-3160.000000, -745.563965, 1684.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Roslit Bay"] = {Position = Vector3.new(-1476.000000, 133.500000, 671.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Desolate Deep"] = {Position = Vector3.new(-1656.197144, -213.779999, -2846.942383), Rotation = Vector3.new(0.000000, 56.243000, 0.000000)},
+        ["Sunstone"] = {Position = Vector3.new(-933.000000, 131.816345, -1119.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Brine Pool"] = {Position = Vector3.new(-1794.000000, -142.961349, -3302.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Spike"] = {Position = Vector3.new(-1254.000000, 137.389557, 1555.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Statue of Skibidi"] = {Position = Vector3.new(73.000000, 141.929993, -1028.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Arch"] = {Position = Vector3.new(999.000000, 131.320236, -1237.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Snowcap"] = {Position = Vector3.new(2649.000000, 142.283829, 2521.000244), Rotation = Vector3.new(0.000000, -26.242001, 0.000000)},
+        ["Volcano"] = {Position = Vector3.new(-1929.942017, 151.588486, 328.903198), Rotation = Vector3.new(0.000000, -3.254000, 0.000000)},
+        ["Vertigo"] = {Position = Vector3.new(-110.001328, -515.299377, 1149.999268), Rotation = Vector3.new(180.000000, 2.255000, 180.000000)},
+        ["Mushgrove"] = {Position = Vector3.new(2501.000000, 131.000015, -720.000000), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Fischmas 2024"] = {Position = Vector3.new(87.360214, 294.499969, -10303.833008), Rotation = Vector3.new(0.000000, 0.000000, 0.000000)},
+        ["Fischmas City"] = {Position = Vector3.new(25.335495, 364.635834, -9582.040039), Rotation = Vector3.new(180.000000, 74.999001, 180.000000)}
         }
 
     --Item Values
     local ItemValues = {
-        {name = "Training_Rod", coords = Vector3.new(457.693848, 148.357529, 230.414307)},
-        {name = "Plastic_Rod", coords = Vector3.new(454.425385, 148.169739, 229.172424)},
-        {name = "Lucky_Rod", coords = Vector3.new(446.085999, 148.253006, 222.160004)},
-        {name = "Kings_Rod", coords = Vector3.new(1375.57642, -810.201721, -303.509247)},
-        {name = "Flimsy_Rod", coords = Vector3.new(471.107697, 148.36171, 229.642441)},
-        {name = "Nocturnal_Rod", coords = Vector3.new(-141.874237, -515.313538, 1139.04529)},
-        {name = "Fast_Rod", coords = Vector3.new(447.183563, 148.225739, 220.187454)},
-        {name = "Carbon_Rod", coords = Vector3.new(454.083618, 150.590073, 225.328827)},
-        {name = "Long_Rod", coords = Vector3.new(485.695038, 171.656326, 145.746109)},
-        {name = "Mythical_Rod", coords = Vector3.new(389.716705, 132.588821, 314.042847)},
-        {name = "Midas_Rod", coords = Vector3.new(401.981659, 133.258316, 326.325745)},
-        {name = "Trident_Rod", coords = Vector3.new(-1484.34192, -222.325562, -2194.77002)},
-        {name = "Enchated_Altar", coords = Vector3.new(1310.54651, -799.469604, -82.7303467)},
-        {name = "Bait_Crate", coords = Vector3.new(384.575134, 135.351928, 337.534027)},
-        {name = "Quality_Bait_Crate", coords = Vector3.new(-177.876, 144.472, 1932.844)},
-        {name = "Crab_Cage", coords = Vector3.new(474.803589, 149.664566, 229.49469)},
-        {name = "GPS", coords = Vector3.new(517.896729, 149.217636, 284.856842)},
-        {name = "Basic_Diving_Gear", coords = Vector3.new(369.174774, 132.508835, 248.705368)},
-        {name = "Fish_Radar", coords = Vector3.new(365.75177, 134.50499, 274.105804)},
-        }
+        {name = "Bait Crate", coords = Vector3.new(383.891144, 136.994125, 333.777832), rotation = Vector3.new(180.000000, -9.743000, 180.000000)},
+        {name = "Quality Bait Crate", coords = Vector3.new(-174.103439, 143.167511, 1931.018066), rotation = Vector3.new(180.000000, 67.754997, 180.000000)},
+        {name = "Crab Cage", coords = Vector3.new(474.081421, 150.500000, 233.840317), rotation = Vector3.new(0.000000, -11.755000, 0.000000)},
+        {name = "GPS", coords = Vector3.new(518.683594, 150.477036, 282.772186), rotation = Vector3.new(180.000000, -11.407000, 180.000000)},
+        {name = "Radar", coords = Vector3.new(365.751770, 137.000015, 274.103027), rotation = Vector3.new(0.000000, 0.001000, 0.000000)},
+        {name = "Basic Diving gear", coords = Vector3.new(369.762268, 134.456268, 248.701965), rotation = Vector3.new(0.000000, 0.456000, 0.000000)},
+        {name = "Advanced Diving gear", coords = nil, rotation = nil},
+        {name = "Tidebreaker", coords = nil, rotation = nil},
+    }
+    
+    
 
     --NPC Values
     local NPCValues = {
@@ -1006,19 +998,20 @@ AntiAfk2()
 
 
 -- // // // Teleport // // //  --
+local locationNames = {}
+for _, location in ipairs(LocationValues) do
+    table.insert(locationNames, location.name)
+end
+local ItemNames = {}
+for _, item in ipairs(ItemValues) do
+    table.insert(ItemNames, item.name)
+end
+local NPCNames = {}
+for _, npc in ipairs(NPCValues) do
+    table.insert(NPCNames, npc.name)
+end
 
-    local locationNames = {}
-    for _, location in ipairs(LocationValues) do
-        table.insert(locationNames, location.name)
-    end
-    local ItemNames = {}
-    for _, item in ipairs(ItemValues) do
-        table.insert(ItemNames, item.name)
-    end
-    local NPCNames = {}
-    for _, npc in ipairs(NPCValues) do
-        table.insert(NPCNames, npc.name)
-    end
+
         -- /// /// Locations /// /// --
         local section = Tabs.Teleport:AddSection("Locations")
         -- Create the dropdown menu
