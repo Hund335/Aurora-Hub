@@ -1,7 +1,7 @@
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
-local ScriptVersion = "1.2"
+local ScriptVersion = "1.1.2"
 local Window = Fluent:CreateWindow({
     Title = "Aurora Hub " .. ScriptVersion,
     SubTitle = "by Hund335",
@@ -12,24 +12,24 @@ local Window = Fluent:CreateWindow({
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
 
---stuff for future features im too lazy to add rn 
+--stuff for future features
 --day = game:GetService("ReplicatedStorage").world.cycle
 --luck = workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Merlin"):WaitForChild("Merlin"):WaitForChild("luck"):InvokeServer()
 --relic = workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Merlin"):WaitForChild("Merlin"):WaitForChild("power"):InvokeServer()
 --rods = game:GetService("ReplicatedStorage").playerstats.zypherinbo.Rods
 --autosell settings
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_relic,
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_event,
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_exotic,
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_gemstone,
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_legendary,
---	game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_mythical,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_relic,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_event,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_exotic,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_gemstone,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_legendary,
+--      game:GetService("ReplicatedStorage").playerstats.zypherinbo.Settings.willautosell_mythical,
 --events
---	game:GetService("ReplicatedStorage").world.luck_Mutation,
---	game:GetService("ReplicatedStorage").world.luck_Luck,
---	game:GetService("ReplicatedStorage").world.luck_Shiny,
---	game:GetService("ReplicatedStorage").world.luck_Sparkling,
---	game:GetService("ReplicatedStorage").world.luck_Weight,
+--      game:GetService("ReplicatedStorage").world.luck_Mutation,
+--      game:GetService("ReplicatedStorage").world.luck_Luck,
+--      game:GetService("ReplicatedStorage").world.luck_Shiny,
+--      game:GetService("ReplicatedStorage").world.luck_Sparkling,
+--      game:GetService("ReplicatedStorage").world.luck_Weight,
 --
 --trade idk how this works yet
 --local args = {
@@ -48,54 +48,6 @@ local Window = Fluent:CreateWindow({
 --workspace.world.npcs.Appraiser.dialogprompt.MaxActivationDistance = 7000000000
 --workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Appraiser"):WaitForChild("appraiser"):WaitForChild("appraise"):InvokeServer()
 
-local AntiAfk = true -- Initialize the AntiAfk variable
-
-function AntiAfk2()
-    spawn(function()
-        while AntiAfk do
-            game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("afk"):FireServer(false)
-            task.wait(0.01)
-        end
-    end)
-end
-
-AntiAfk2()
-
-local UserInputService = game:GetService("UserInputService")
-
-function pressLKey()
-    spawn(function()
-        while true do
-            -- Simulate pressing the "L" key
-            local UserInputService = game:GetService("UserInputService")
-
-            -- Define the action you want to perform when the "L" key is pressed
-            local function performAction()
-                print("Action performed as if L key was pressed")
-                -- Add your logic here
-            end
-
-            -- Connect the action to the actual "L" key press
-            UserInputService.InputBegan:Connect(function(input, gameProcessedEvent)
-                if not gameProcessedEvent then
-                    if input.KeyCode == Enum.KeyCode.L then
-                        performAction()
-                    end
-                end
-            end)
-
-            -- Simulate the "L" key press by directly calling the function
-            performAction()
-                        -- Wait for 5 seconds before pressing again
-            task.wait(120)
-        end
-    end)
-end
-
--- Call the function to start pressing "L" every 5 seconds
-pressLKey()
-
--- this is for esp ig 
 local function createBillboardGui(locationName, position, rotation)
     -- Create a part to attach the BillboardGui
     local part = Instance.new("Part")
@@ -142,7 +94,6 @@ local function createBillboardGui(locationName, position, rotation)
 
     -- Create another text label for the distance
     local distanceLabel = Instance.new("TextLabel")
-    distanceLabel.Text = "[" .. "NOT DEFINED" .. "]"
     distanceLabel.Size = UDim2.new(1, 0, 0.5, 0)  -- Take up the other half of the BillboardGui
     distanceLabel.BackgroundTransparency = 1
     distanceLabel.TextColor3 = Color3.new(0, 0, 1)  -- Blue color
@@ -151,17 +102,17 @@ local function createBillboardGui(locationName, position, rotation)
     distanceLabel.Parent = frame
 end
 
-do 
-    
-	Config = {
+do
 
-	}
-	_G.Config = Config
-	AllFuncs = {}
-	Threads = getgenv().Threads
-	Players = game.Players
-	LocalPlayer = game.Players.LocalPlayer
-	Client = game.Players.LocalPlayer
+        Config = {
+
+        }
+        _G.Config = Config
+        AllFuncs = {}
+        Threads = getgenv().Threads
+        Players = game.Players
+        LocalPlayer = game.Players.LocalPlayer
+        Client = game.Players.LocalPlayer
 
 
         -- \\ Module GetService // --
@@ -177,25 +128,24 @@ do
         VirtualInputManager = game:GetService("VirtualInputManager")
         UserInputService = game:GetService("UserInputService")
 
-	-- \\ Normal Module // --
-    --no fucking clue what this does but if i remove it the script breaks
-    request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or (function()
-        error("No compatible request function found.")
-    end)
-	PlayerGui = LocalPlayer.PlayerGui
-	Backpack = LocalPlayer.Backpack
-	request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
 
-	Char = Client.Character
-	Character = Client.Character
-	if not Threads then getgenv().Threads = {} end
+        -- \\ Normal Module // --
 
-	repeat 
-		LocalPlayer = Players.LocalPlayer
-		wait()
-	until LocalPlayer
+        PlayerGui = LocalPlayer.PlayerGui
+        Backpack = LocalPlayer.Backpack
+        request = (syn and syn.request) or (http and http.request) or http_request or (fluxus and fluxus.request) or request
+
+        Char = Client.Character
+        Character = Client.Character
+        if not Threads then getgenv().Threads = {} end
+
+        repeat
+                LocalPlayer = Players.LocalPlayer
+                wait()
+        until LocalPlayer
 end
--- Services
+
+-- // // // Services // // // --
     local VirtualInputManager = game:GetService("VirtualInputManager")
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local VirtualUser = game:GetService("VirtualUser")
@@ -207,6 +157,8 @@ end
     local CoreGui = game:GetService('StarterGui')
     local ContextActionService = game:GetService('ContextActionService')
     local UserInputService = game:GetService('UserInputService')
+    
+
 -- // // // Locals // // // --
     local LocalPlayer = Players.LocalPlayer
     local LocalCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
@@ -220,7 +172,16 @@ end
     local screenGui = Instance.new("ScreenGui", PlayerGui)
     local RenderStepped = RunService.RenderStepped
     local WaitForSomeone = RenderStepped.Wait
+    local AntiAfk = 
 
+    local IsIsonadeDetected = false
+    local IsWhaleSharkDetected = false
+    local IsGreatWhiteSharkDetected = false
+    local IsGreatHammerheadSharkDetected = false
+    local IsMegalodonDetected = false
+    local IsAncientDepthSerpentDetected = false
+-- // // // Features List // // // --
+-- a lot
 -- // // // Location Tables // // // --
     -- Location Values
     -- Define the locations as a table
@@ -252,7 +213,7 @@ end
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125)},
         {name = "ancient", coords = Vector3.new(5803.2783203125, 135.30149841308594, 407.7121887207031)},
         {name = "forsaken shores", coords = Vector3.new(-2675.330078125, 164.75064086914062, 1758.0570068359375)},
-        {name = "enchant", coords = Vector3.new(1310.264404, -805.292236, -99.972527)},
+        {name = "enchant", coords = Vector3.new(1296, -805, -299)},
         {name = "terapin", coords = Vector3.new(-143, 145, 1909)},
         {name = "Crafting", coords = Vector3.new(-3160, -745, 1684)},
         {name = "roslit", coords = Vector3.new(-1476, 133, 671)},
@@ -267,19 +228,29 @@ end
         {name = "Vertigo", coords = Vector3.new(-110, -515, 1150)},
         {name = "mushgrove", coords = Vector3.new(2501, 131, -720)},
         {name = "Fischmas 2024", coords = Vector3.new(87.36021423339844, 294.5, -10303.8330078125)},
-        {name = "Fischmas City", coords = Vector3.new(25.335494995117188, 364.6358337402344, -9582.0400390625)}
         }
 
     --Item Values
     local ItemValues = {
-        {name = "Bait Crate" , coords = Vector3.new(383.891144, 136.994125, 333.777832)},
-        {name = "Quality Bait Crate" , coords = Vector3.new(-174.103439, 143.167511, 1931.018066)},
-        {name = "Crab Cage" , coords = Vector3.new(474.081421, 150.500000, 233.840317)},
-        {name = "GPS" , coords = Vector3.new(518.683594, 150.477036, 282.772186)},
-        {name = "Radar" , coords = Vector3.new(365.751770, 137.000015, 274.103027)},
-        {name = "Basic Diving gear" , coords = Vector3.new(369.762268, 134.456268, 248.701965)},
-        {name = "Advanced Diving gear" , coords = Vector3.new(nil, nil, nil)},
-        {name = "Tidebreaker" , coords = Vector3.new(nil, nil, nil)}
+        {name = "Training_Rod", coords = Vector3.new(457.693848, 148.357529, 230.414307)},
+        {name = "Plastic_Rod", coords = Vector3.new(454.425385, 148.169739, 229.172424)},
+        {name = "Lucky_Rod", coords = Vector3.new(446.085999, 148.253006, 222.160004)},
+        {name = "Kings_Rod", coords = Vector3.new(1375.57642, -810.201721, -303.509247)},
+        {name = "Flimsy_Rod", coords = Vector3.new(471.107697, 148.36171, 229.642441)},
+        {name = "Nocturnal_Rod", coords = Vector3.new(-141.874237, -515.313538, 1139.04529)},
+        {name = "Fast_Rod", coords = Vector3.new(447.183563, 148.225739, 220.187454)},
+        {name = "Carbon_Rod", coords = Vector3.new(454.083618, 150.590073, 225.328827)},
+        {name = "Long_Rod", coords = Vector3.new(485.695038, 171.656326, 145.746109)},
+        {name = "Mythical_Rod", coords = Vector3.new(389.716705, 132.588821, 314.042847)},
+        {name = "Midas_Rod", coords = Vector3.new(401.981659, 133.258316, 326.325745)},
+        {name = "Trident_Rod", coords = Vector3.new(-1484.34192, -222.325562, -2194.77002)},
+        {name = "Enchated_Altar", coords = Vector3.new(1310.54651, -799.469604, -82.7303467)},
+        {name = "Bait_Crate", coords = Vector3.new(384.575134, 135.351928, 337.534027)},
+        {name = "Quality_Bait_Crate", coords = Vector3.new(-177.876, 144.472, 1932.844)},
+        {name = "Crab_Cage", coords = Vector3.new(474.803589, 149.664566, 229.49469)},
+        {name = "GPS", coords = Vector3.new(517.896729, 149.217636, 284.856842)},
+        {name = "Basic_Diving_Gear", coords = Vector3.new(369.174774, 132.508835, 248.705368)},
+        {name = "Fish_Radar", coords = Vector3.new(365.75177, 134.50499, 274.105804)},
         }
 
     --NPC Values
@@ -309,15 +280,6 @@ end
     {name = "Alfredrickus", coords = Vector3.new(-1520.60632, 142.923264, 764.522034)},
     }
 
-    local TotemValues = { 
-        {name = "Aurora", coords = Vector3.new(-1811, -136, -3282)},
-        {name = "Smokescreen", coords = Vector3.new(2789, 139, -625)},
-        {name = "Windset", coords = Vector3.new(2849, 178, 2702)},
-        {name = "Tempest", coords = Vector3.new(35, 132, 1943)},
-        {name = "Sundial", coords = Vector3.new(-1148, 134, -1075)},
-        {name = "Eclipse", coords = Vector3.new(5968, 273, 838)},
-        {name = "Meteor", coords = Vector3.new(-1948, 275, 230)}
-    }
     local MerchantValues = {
         {name = "moosewood", coords = Vector3.new(470, 150, 260), remotePath = "Marc Merchant"},
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125), remotePath = "Milo Merchant"},
@@ -327,12 +289,11 @@ end
         {name = "desolate Deep", coords = Vector3.new(-1655, -213, -2846), remotePath = "Mel Merchant"},
         {name = "sunstone Island", coords = Vector3.new(-933, 131, -1119), remotePath = "Max Merchant"},
         {name = "snowcap", coords = Vector3.new(2649, 142, 2521), remotePath = "Mike Merchant"},
-	-- add merchant for christmas event 
     }
 -- // // // Variables // // // --
-    --gotta move some variables here to make it easier to manage
-    local AutoFish = false
-    local AutoSell = false
+    local CastMode = "Blatant"
+    local ShakeMode = "Navigation"
+    local ReelMode = "Blatant"
     local CollectMode = "Teleports"
     local teleportSpots = {}
     local FreezeChar = false
@@ -345,19 +306,44 @@ end
 -- // // // Tabs // // // --
     local Tabs = {
         Main = Window:AddTab({ Title = "Main", Icon = "house" }),
-        Teleport = Window:AddTab({ Title = "Teleport", Icon = "" }),
+        Teleport = Window:AddTab({ Title = "Teleport", Icon = "backpack" }),
         Items = Window:AddTab({ Title = "Items", Icon = "backpack" }),
         Player = Window:AddTab({ Title = "Player", Icon = "person-standing" }),
         Auto = Window:AddTab({ Title = "Automatically", Icon = "computer" }),
         Misc = Window:AddTab({ Title = "Misc", Icon = "circle-ellipsis" }),
-        --Webhook = Window:AddTab({ Title = "Webhook", Icon = "database" }),
+        Webhook = Window:AddTab({ Title = "Webhook", Icon = "database" }),
         Executor = Window:AddTab({ Title = "Executor", Icon = "scroll-text" }),
         Settings = Window:AddTab({ Title = "Settings", Icon = "settings" }),
-        --Info = Window:AddTab({ Title = "Info", Icon = "info" }),
-	-- add stats tab
+        Info = Window:AddTab({ Title = "Info", Icon = "info" }),
         }
 
     local Options = Fluent.Options
+
+-- // // // FUNCTIONS // // // --
+
+function AntiAfk2()
+    task.spawn(function()
+        while AntiAfk do
+            game:GetService("ReplicatedStorage"):WaitForChild("events"):WaitForChild("afk"):FireServer(false)
+            task.wait(0.01)
+        end
+    end)
+
+    -- Spawn another thread to press the "L" key every 5 minutes
+    task.spawn(function()
+        while AntiAfk do
+            local VirtualInputManager = game:GetService("VirtualInputManager")
+            VirtualInputManager:SendKeyEvent(true, "L", false, nil) -- Press "L"
+            task.wait(0.1) -- Short delay to simulate key press
+            VirtualInputManager:SendKeyEvent(false, "L", false, nil) -- Release "L"
+            task.wait(300) -- Wait 5 minutes (300 seconds)
+        end
+    end)
+end
+
+AntiAfk2()
+
+
 -- // // // Noclip // // // --
     NoclipConnection = RunService.Stepped:Connect(function()
         if Noclip == true then
@@ -373,19 +359,19 @@ end
     function rememberPosition()
         spawn(function()
             local initialCFrame = HumanoidRootPart.CFrame
-    
+
             local bodyVelocity = Instance.new("BodyVelocity")
             bodyVelocity.Velocity = Vector3.new(0, 0, 0)
             bodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
             bodyVelocity.Parent = HumanoidRootPart
-    
+
             local bodyGyro = Instance.new("BodyGyro")
             bodyGyro.MaxTorque = Vector3.new(math.huge, math.huge, math.huge)
             bodyGyro.D = 100
             bodyGyro.P = 10000
             bodyGyro.CFrame = initialCFrame
             bodyGyro.Parent = HumanoidRootPart
-    
+
             while AutoFreeze do
                 HumanoidRootPart.CFrame = initialCFrame
                 task.wait(0.01)
@@ -409,7 +395,7 @@ end
     --sunstone workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Max Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
     --snowcap workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild("Mike Merchant"):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
 
-    -- need to fix teleport to merchant for 1st time
+
     function SellHand()
             local currentPosition = HumanoidRootPart.CFrame
             local sellPosition = CFrame.new(464, 151, 232)
@@ -490,15 +476,12 @@ end
 
 
 -- // // // Main Tab // // // --
-    -- add or move a lot of stuff here
 
+    local section = Tabs.Main:AddSection("Main")
     local FreezeCharacter = Tabs.Main:AddToggle("FreezeCharacter", {Title = "Freeze Character", Default = false })
     FreezeCharacter:OnChanged(function()
         local oldpos = HumanoidRootPart.CFrame
         FreezeChar = Options.FreezeCharacter.Value
-        if FreezeChar then
-            rememberPosition()
-        end
         task.wait()
         while WaitForSomeone(RenderStepped) do
             if FreezeChar and HumanoidRootPart ~= nil then
@@ -509,9 +492,7 @@ end
             end
         end
     end)
-
- 
--- // // //  Sell Tab // // // --
+-- // // //  Sell Tab  // // // --
     local section = Tabs.Items:AddSection("Sell Items")
     Tabs.Items:AddButton({
         Title = "Sell Hand",
@@ -527,6 +508,9 @@ end
             SellAll()
         end
     })
+    -- Add a table to keep track of whether the player has visited a merchant or not
+    local visitedMerchants = {}
+
     local section = Tabs.Auto:AddSection("Sell")
     local Slider = Tabs.Auto:AddSlider("AutoSellDelay", {
         Title = "Auto Sell Delay",
@@ -540,23 +524,22 @@ end
         end
     })
 
-    -- Handle the slider change event
+
     Slider:OnChanged(function(Value)
         print("Slider changed:", Value)
     end)
 
-    -- Set the default value of the slider
+
     Slider:SetValue(120)
 
-    -- Create the Toggle
-    local Toggle = Tabs.Auto:AddToggle("Autoselltoggle", {Title = "Auto Sell", Default = false })
+    local Toggle = Tabs.Auto:AddToggle("Autoselltoggle", {Title = "Auto Sell", Default = false})
 
-    -- Function to trigger SellAll after the delay set by the slider
+
     local function triggerSellAllAfterDelay(delay)
         Fluent:Notify({
-            Title = "SellALl",
-            Content = "For this to work go to your nearest merchant and sell everything 1 time after that it will work until you rejoin",
-            Duration = 10 -- Set to nil to make the notification not disappear
+            Title = "SellAll",
+            Content = "For this to work, go to your nearest merchant and sell everything 1 time after that it will work until you rejoin.",
+            Duration = 10
         })
         while Toggle.Value do  -- While the toggle is ON
             print("Waiting for", delay, "seconds...")
@@ -566,7 +549,7 @@ end
         end
     end
 
-    -- Handle the toggle change event
+
     Toggle:OnChanged(function()
         print("Toggle changed:", Toggle.Value)
         if Toggle.Value then
@@ -579,8 +562,57 @@ end
         end
     end)
 
-    -- Set the default value of the toggle
+
     Toggle:SetValue(false)
+
+    -- Function to teleport player to nearest merchant and track first-time visits
+    local function teleportToMerchantAndSell(player)
+        local nearestMerchant = nil
+        local nearestDistance = math.huge
+
+        -- Find the nearest merchant
+        for _, merchant in ipairs(MerchantValues) do
+            local distance = (player.Character.HumanoidRootPart.Position - merchant.coords).Magnitude
+            if distance < nearestDistance then
+                nearestDistance = distance
+                nearestMerchant = merchant
+            end
+        end
+
+        if nearestMerchant then
+            -- Check if the player has already visited this merchant
+            if not visitedMerchants[nearestMerchant.name] then
+                -- Store the original position before teleporting to the merchant
+                local originalPosition = player.Character.HumanoidRootPart.Position
+
+                -- First-time visit, teleport to the merchant
+                print("Teleporting to", nearestMerchant.name)
+                local rootPart = player.Character.HumanoidRootPart
+                local merchantLocation = nearestMerchant.coords
+                rootPart.CFrame = CFrame.new(merchantLocation)
+                task.wait(0.5)
+
+                -- Log that the player has visited this merchant
+                visitedMerchants[nearestMerchant.name] = true
+
+                -- Interact with the merchant's SellAll
+                workspace:WaitForChild("world"):WaitForChild("npcs"):WaitForChild(nearestMerchant.remotePath):WaitForChild("merchant"):WaitForChild("sellall"):InvokeServer()
+
+                -- Wait for a few seconds to simulate selling
+                task.wait(3)
+
+                -- Teleport back to the original position (you can customize the position as needed)
+                rootPart.CFrame = CFrame.new(originalPosition)
+                print("Teleported back to original position")
+            else
+                print("Player has already visited", nearestMerchant.name, "before. Skipping teleportation.")
+            end
+        end
+    end
+
+    -- You can call teleportToMerchantAndSell(player) when needed.
+    -- Example:
+    -- teleportToMerchantAndSell(game.Players.LocalPlayer)
 -- // // // Treasure Tab // // // --
     local section = Tabs.Items:AddSection("Treasure")
     Tabs.Items:AddButton({
@@ -592,7 +624,7 @@ end
     Tabs.Items:AddButton({
         Title = "Repair Map",
         Callback = function()
-            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do 
+            for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
                 if v.Name == "Treasure Map" then
                     game.Players.LocalPlayer.Character.Humanoid:EquipTool(v)
                     workspace.world.npcs["Jack Marrow"].treasure.repairmap:InvokeServer()
@@ -608,18 +640,17 @@ end
                     v.HoldDuration = 0
                 end
             end
-
-	-- look into this looks useful to fire proximity event 
             for i, v in pairs(workspace.world.chests:GetDescendants()) do
-                if v:IsA("Part") and v:FindFirstChild("ChestSetup") then 
+                if v:IsA("Part") and v:FindFirstChild("ChestSetup") then
                     game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                    wait(0.5)
                     for _, v in pairs(workspace.world.chests:GetDescendants()) do
                         if v.Name == "ProximityPrompt" then
                             fireproximityprompt(v)
                         end
                     end
                     task.wait(1)
-                end 
+                end
             end
         end
     })
@@ -636,7 +667,7 @@ end
             local player = game.Players.LocalPlayer
             local character = player.Character or player.CharacterAdded:Wait()
             local humanoid = character:FindFirstChildOfClass("Humanoid")
-            
+
             -- Ensure that humanoid is found and set the initial WalkSpeed
             if humanoid then
                 humanoid.WalkSpeed = Value
@@ -644,13 +675,14 @@ end
             end
         end
     })
-    
+
     -- Continuously monitor and update WalkSpeed if it's changed elsewhere
     local function monitorWalkSpeed()
         local player = game.Players.LocalPlayer
+
         local character = player.Character or player.CharacterAdded:Wait()
         local humanoid = character:FindFirstChildOfClass("Humanoid")
-        
+
         -- Monitor and update WalkSpeed periodically
         game:GetService("RunService").Heartbeat:Connect(function()
             if humanoid and humanoid.WalkSpeed ~= Slider.Value then
@@ -658,10 +690,10 @@ end
             end
         end)
     end
-    
+
     -- Call the function to start monitoring
     monitorWalkSpeed()
-    
+
 
 
 
@@ -721,7 +753,7 @@ end
         Default = "Ocean",
     })
 
-    local IdentityHiderUI = Tabs.Player:AddToggle("IdentityHiderUI", {Title = "Protect Identity", Default = false })    
+    local IdentityHiderUI = Tabs.Player:AddToggle("IdentityHiderUI", {Title = "Protect Identity", Default = false })   
     IdentityHiderUI:OnChanged(function()
         while Options.IdentityHiderUI.Value == true do
             if UserPlayer:FindFirstChild("streak") then UserPlayer.streak.Text = "inf" end
@@ -828,9 +860,9 @@ end
     local section = Tabs.Misc:AddSection("Visual")
     local Players = game:GetService("Players") -- Get the Players service
     local player = Players.LocalPlayer -- Define the local player
-    
+
     local Toggle = Tabs.Misc:AddToggle("Zoom", {Title = "Infinite Zoom", Default = false})
-    
+
     Toggle:OnChanged(function()
         local isToggled = Toggle.Value -- Correct reference to the toggle's state
         if isToggled then
@@ -843,14 +875,14 @@ end
             print("CameraMaxZoomDistance reset to default (128)")
         end
     end)
-    
+
     Toggle:SetValue(false)
     -- // ESP // --
     local section = Tabs.Misc:AddSection("ESP")
     local Toggle = Tabs.Misc:AddToggle("MyToggle", {Title = "Toggle", Default = false })
 
     local espEnabled = Toggle.Value  -- Initial state based on the toggle
-    
+
     -- Function to create or remove ESP dynamically
     local function updateESP()
         if espEnabled then
@@ -867,37 +899,22 @@ end
             end
         end
     end
-    
+
     Toggle:OnChanged(function()
         espEnabled = Toggle.Value  -- Update the espEnabled state based on the toggle
         print("Toggle changed:", espEnabled)
-        
+
         updateESP()  -- Update the ESP based on the new toggle state
-    end) 
-    
+    end)
+
     -- Initial call to enable ESP at the start if espEnabled is true
     if espEnabled then
         updateESP()
     end
-    
-    -- Continuous update to check distance if needed (this part can stay as is)
-    local player = game.Players.LocalPlayer
-    local position = Vector3.new(0, 0, 0)  -- Target position
-    
-    spawn(function()
-        local success, errorMessage = pcall(function()
-            while true do
-                wait(1)  -- Update every second
-                if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                    local distance = (player.Character.HumanoidRootPart.Position - position).Magnitude
-                    distanceLabel.Text = "[ " .. tostring(math.floor(distance)) .. " studs ]"
-                end
-            end
-        end)
-        if not success then
-            print("Error: " .. errorMessage)
-        end
-    end)
+
+
+
+
 
     --remove fog
     local RemoveFog = Tabs.Misc:AddToggle("RemoveFog", {Title = "Remove Fog", Default = false })
@@ -917,13 +934,13 @@ end
     DayOnly:OnChanged(function()
         if Options.DayOnly.Value == true then
             DayOnlyLoop = RunService.Heartbeat:Connect(function()
-				game:GetService("Lighting").TimeOfDay = "12:00:00"
-			end)
-		else
-			if DayOnlyLoop then
-				DayOnlyLoop:Disconnect()
-				DayOnlyLoop = nil
-			end
+                                game:GetService("Lighting").TimeOfDay = "12:00:00"
+                        end)
+                else
+                        if DayOnlyLoop then
+                                DayOnlyLoop:Disconnect()
+                                DayOnlyLoop = nil
+                        end
         end
     end)
     Options.MyToggle:SetValue(false)
@@ -940,7 +957,7 @@ end
             end
         end
     end)
-    
+
     -- Use spawn to run the reset code in the background
     spawn(function()
         while true do
@@ -954,7 +971,7 @@ end
             end
         end
     end)
-    
+
     --disable oxygen
     local DisableOxygen = Tabs.Misc:AddToggle("DisableOxygen", {Title = "Disable Oxygen", Default = true })
     DisableOxygen:OnChanged(function()
@@ -1004,7 +1021,7 @@ end
         })
 
 
--- // // //  Teleport // // //  --
+-- // // // Teleport // // //  --
 
     local locationNames = {}
     for _, location in ipairs(LocationValues) do
@@ -1018,11 +1035,7 @@ end
     for _, npc in ipairs(NPCValues) do
         table.insert(NPCNames, npc.name)
     end
-    local TotemNames = {}
-    for _, totem in ipairs(TotemValues) do
-        table.insert(TotemNames, totem.name)
-    end
-        --/// /// Locations /// /// --
+        -- /// /// Locations /// /// --
         local section = Tabs.Teleport:AddSection("Locations")
         -- Create the dropdown menu
         local Dropdown = Tabs.Teleport:AddDropdown("LocationDropdown", {
@@ -1108,53 +1121,9 @@ end
                 else
                     warn("No location selected")
                 end
-          
             end,
         })
-        --/// /// TOTEMS /// /// --
-        local section = Tabs.Teleport:AddSection("Totems")
-        -- Create the dropdown menu
-        local Dropdown = Tabs.Teleport:AddDropdown("TotemDropdown", {
-            Title = "Select a Totem",
-            Values = TotemNames,  -- Corrected from TotemValues to TotemNames
-            Multi = false,
-            Default = 1,
-        })
 
-        -- Add the teleport button
-        Tabs.Teleport:AddButton({
-            Title = "Teleport",
-            Description = "Teleport to the selected Totem",
-            Callback = function()
-                -- Get the selected location name
-                local selectedTotemName = Dropdown.Value
-                if selectedTotemName then
-                    -- Find the location in LocationValues by name
-                    local selectedTotem
-                    for _, location in ipairs(TotemValues) do
-                        if location.name == selectedTotemName then
-                            selectedTotem = location
-                            break
-                        end
-                    end
-
-                    -- If a valid location was found
-                    if selectedTotem and game.Players.LocalPlayer.Character then
-                        local character = game.Players.LocalPlayer.Character
-                        if character:FindFirstChild("HumanoidRootPart") then
-                            -- Teleport the player to the selected location's coordinates
-                            character.HumanoidRootPart.CFrame = CFrame.new(selectedTotem.coords)
-                        else
-                            warn("HumanoidRootPart not found in the character")
-                        end
-                    else
-                        warn("Location not found or player character missing")
-                    end
-                else
-                    warn("No location selected")
-                end
-            end,
-        })
         --/// /// NPCS /// /// --
         local section = Tabs.Teleport:AddSection("NPCs")
         -- Create the dropdown menu
@@ -1234,60 +1203,130 @@ end
             UpdatePlayerListDropdown(PlayerDropdown)
             end)
 
-        Tabs.Teleport:AddButton({Title = "Teleport to Player",
-            Description = "Teleport to the selected player.",
-            Callback = function()
-                local selectedPlayerName = PlayerDropdown.Value
-                if selectedPlayerName then
-                    local targetPlayer = Players:FindFirstChild(selectedPlayerName)
-                    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                        local targetPosition = targetPlayer.Character.HumanoidRootPart.Position
-                        local character = player.Character or player.CharacterAdded:Wait()
-                        if character and character:FindFirstChild("HumanoidRootPart") then
-                            character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
-                            print("Teleported to", selectedPlayerName)
-                        else
-                            print("Could not find your character's HumanoidRootPart!")
-                        end
-                    else
-                        print("Target player not found or does not have a valid character!")
-                    end
-                else
-                    print("No player selected!")
+            local Players = game:GetService("Players")
+
+            -- Function to update the player's last known position
+            local function updateLastKnownPosition(player)
+                local character = player.Character
+                if character and character:FindFirstChild("HumanoidRootPart") then
+                    local position = character.HumanoidRootPart.Position
+                    -- Store the position as an attribute (you can also use a DataStore if needed)
+                    player:SetAttribute("LastKnownPosition", position)
+                    print("Last known position updated for", player.Name, position)
                 end
             end
+
+            -- Update the last known position when the player moves or at certain intervals
+            Players.PlayerAdded:Connect(function(player)
+                player.CharacterAdded:Connect(function(character)
+                    -- Make sure to update last known position when the character respawns
+                    character:WaitForChild("HumanoidRootPart")
+                    updateLastKnownPosition(player)
+                end)
+
+                -- Monitor character's humanoid for movement or disconnect
+                local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+                if humanoid then
+                    humanoid.Running:Connect(function(speed)
+                        if speed > 0 then
+                            -- Update position when the player moves
+                            updateLastKnownPosition(player)
+                        end
+                    end)
+                end
+            end)
+
+            -- Initial update for existing players
+            for _, player in ipairs(Players:GetPlayers()) do
+                if player ~= Players.LocalPlayer then
+                    if player.Character then
+                        updateLastKnownPosition(player)
+                    end
+                    player.CharacterAdded:Connect(function(character)
+                        character:WaitForChild("HumanoidRootPart")
+                        updateLastKnownPosition(player)
+                    end)
+                end
+            end
+
+            -- Function for teleporting to another player's last known position
+            Tabs.Teleport:AddButton({
+                Title = "Teleport to Player",
+                Description = "Teleport to the selected player, even if they are not rendered.",
+                Callback = function()
+                    local selectedPlayerName = PlayerDropdown.Value
+                    if selectedPlayerName then
+                        local targetPlayer = Players:FindFirstChild(selectedPlayerName)
+                        if targetPlayer then
+                            -- Attempt to get the position from the player's character
+                            local targetPosition
+                            if targetPlayer.Character then
+                                -- If the character exists, we use the HumanoidRootPart position
+                                local humanoidRootPart = targetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                if humanoidRootPart then
+                                    targetPosition = humanoidRootPart.Position
+                                end
+                            end
+
+                            -- If no valid character position found, fall back to last known position
+                            if not targetPosition then
+                                targetPosition = targetPlayer:GetAttribute("LastKnownPosition")  -- Retrieve the last known position
+                            end
+
+                            if targetPosition then
+                                local character = player.Character or player.CharacterAdded:Wait()
+                                if character and character:FindFirstChild("HumanoidRootPart") then
+                                    -- Teleport the player to the target position
+                                    character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+                                    print("Teleported to", selectedPlayerName)
+                                else
+                                    print("Could not find your character's HumanoidRootPart!")
+                                end
+                            else
+                                print("Could not find target player's position!")
+                            end
+                        else
+                            print("Target player not found or does not have a valid character!")
+                        end
+                    else
+                        print("No player selected!")
+                    end
+                end
             })
-        local section = Tabs.Teleport:AddSection("Server")
+
+            local section = Tabs.Teleport:AddSection("Server")
+
 -- // // // Premium Autofish // // //   --
-    -- need to add farm zones auto sell when not fishing, auto sell rariies, freeze position
-    -- Declare toggle state and location variables
+        -- auto sell rariies, freeze position and make more reliable when fishing
+        -- Declare toggle state and location variables
 
-    local Locations = {
-        EXP = {Position = Vector3.new(-2675.331055, 164.795013, 1758.057129), Rotation = Vector3.new(0, 75.243, 0)},
-        Money = {Position = Vector3.new(890.312195, -737.915710, 1123.411865), Rotation = Vector3.new(0.000000, -1.344000, 0.000000)},
-        Event = {Position = Vector3.new(87.360214, 294.499969, -10303.833008), Rotation = Vector3.new(0, 0, 0)},
-        Ancient = {Position = Vector3.new(5805.021484, 135.301498, 405.922119), Rotation = Vector3.new(0, -42.669, 0)},
-        None = nil
-    }
+        local Locations = {
+            EXP = {Position = Vector3.new(-2675.331055, 164.795013, 1758.057129), Rotation = Vector3.new(0, 75.243, 0)},
+            Money = {Position = Vector3.new(890.312195, -737.915710, 1123.411865), Rotation = Vector3.new(0.000000, -1.344000, 0.000000)},
+            Event = {Position = Vector3.new(87.360214, 294.499969, -10303.833008), Rotation = Vector3.new(0, 0, 0)},
+            Ancient = {Position = Vector3.new(5805.021484, 135.301498, 405.922119), Rotation = Vector3.new(0, -42.669, 0)},
+            None = nil
+        }
 
-    local section = Tabs.Auto:AddSection("Farm")
-   
-    local autofishEnabled = false
-    local selectedLocation = "EXP" -- Default teleport location
+        local section = Tabs.Auto:AddSection("Farm")
 
-    -- Dropdown with teleport locations
-    local Dropdown = Tabs.Auto:AddDropdown("Dropdown", {
-        Title = "Teleport Location",
-        Values = {"EXP", "Money", "Event", "Ancient", "None"},
-        Multi = false,
-        Default = "EXP",
-    })
+        local autofishEnabled = false
+        local selectedLocation = "EXP" -- Default teleport location
 
-    Dropdown:OnChanged(function(newValue)
-        selectedLocation = newValue 
-    end)
+        -- Dropdown with teleport locations
+        local Dropdown = Tabs.Auto:AddDropdown("Dropdown", {
+            Title = "Teleport Location",
+            Values = {"EXP", "Money", "Event", "Ancient", "None"},
+            Multi = false,
+            Default = "EXP",
+        })
 
-   -- Autofarm toggle
+        Dropdown:OnChanged(function(newValue)
+            selectedLocation = newValue
+        end)
+
+        -- Location data
+    -- Autofarm toggle
     local ToggleAutofarm = Tabs.Auto:AddToggle("ToggleAutoFarm", {Title = "Fish Autofarm", Default = false})
 
     ToggleAutofarm:OnChanged(function(newState)
@@ -1304,7 +1343,7 @@ end
             -- Start the autofishing loop in a coroutine
             coroutine.wrap(function()
                 local XyzClone
-                while autofishEnabled and task.wait() do
+                while autofishEnabled and task.wait(0.1) do
                     -- Equip the fishing rod
                     if Backpack:FindFirstChild(RodName) then
                         LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
@@ -1319,6 +1358,22 @@ end
                         end
 
                         XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+                        local lureChanged = false
+                        local lureValue = LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value
+
+                        -- Check if lure value changes within 30 seconds
+                        coroutine.wrap(function()
+                            local initialLureValue = lureValue
+                           -- local initialCastValue = LocalPlayer.Character:FindFirstChild(RodName).values.casted.Value
+                            task.wait(15)
+                            if lureValue == initialLureValue then
+                                lureChanged = false
+                                LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+                            else
+                                lureChanged = true
+                            end
+                        end)()
+
                         repeat
                             pcall(function()
                                 PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
@@ -1329,7 +1384,7 @@ end
                             -- Update lure percentage
                             XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
                             RunService.Heartbeat:Wait()
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
+                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled or lureChanged
 
                         XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
                         delay(1.5, function()
@@ -1340,11 +1395,11 @@ end
                         end)
 
                         repeat
-                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000000000000000, true)
+                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000, true)
                             task.wait(0.5)
                         until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
                     else
-                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000000000000000)
+                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000)
                         task.wait(2)
                     end
                 end
@@ -1357,9 +1412,7 @@ end
             end)()
         end
     end)
-
-
--- // // // Load Scripts // // // --
+-- // // // Scripts // // // --
     Tabs.Executor:AddButton({
         Title = "Speed Hub X",
         Description = "Open Speed Hub X",
@@ -1413,8 +1466,8 @@ end
             print("script executed")
         end
     })
--- // // // Webhook broken// // // 
-    -- CURRENTLY NOT WORKING SO I REMOVED IT
+-- // // // Webhook // // //
+--need
 -- // // // SERVICES // // // --
     -- Addons:
     -- SaveManager (Allows you to have a configuration system)
