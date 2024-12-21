@@ -172,14 +172,16 @@ end
     local screenGui = Instance.new("ScreenGui", PlayerGui)
     local RenderStepped = RunService.RenderStepped
     local WaitForSomeone = RenderStepped.Wait
-    local AntiAfk = 
+    local AntiAfk = true
 
     local IsIsonadeDetected = false
+    --workspace.zones.fishing["Isonade"]
     local IsWhaleSharkDetected = false
     local IsGreatWhiteSharkDetected = false
     local IsGreatHammerheadSharkDetected = false
     local IsMegalodonDetected = false
     local IsAncientDepthSerpentDetected = false
+    --workspace.zones.fishing["The Depths - Serpent"]
 -- // // // Features List // // // --
 -- a lot
 -- // // // Location Tables // // // --
@@ -339,7 +341,6 @@ function AntiAfk2()
     end)
 
     -- Spawn another thread to press the "L" key every 5 minutes
-function AntiAfk3()
     task.spawn(function()
         while AntiAfk do
             local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -350,9 +351,7 @@ function AntiAfk3()
         end
     end)
 end
-end
 AntiAfk2()
-antiAfk3()
 
 
 -- // // // Noclip // // // --
@@ -1043,7 +1042,7 @@ antiAfk3()
         table.insert(ItemNames, item.name)
     end
     local TotemNames = {}
-    for _, npc in ipairs(totemvalues) do
+    for _, totem in ipairs(totemvalues) do
         table.insert(TotemNames, totem.name)
     end
     local NPCNames = {}
@@ -1386,91 +1385,120 @@ antiAfk3()
 
         -- Location data
     -- Autofarm toggle
-    local ToggleAutofarm = Tabs.Auto:AddToggle("ToggleAutoFarm", {Title = "Fish Autofarm", Default = false})
+    -- have a variable to farm events 
+    -- have a variable that indicates if an event spawned that turns off the lock position
+    -- when a meg or serpent or any shark spawns it will turn on the walk on water for the corresponding position
+    -- fish at the event until it is over and then turn off the walk on water and teleport back to the specified location
+    --
+local ToggleAutofarm = Tabs.Auto:AddToggle("ToggleAutoFarm", {Title = "Fish Autofarm", Default = false})
 
-    ToggleAutofarm:OnChanged(function(newState)
-        autofishEnabled = newState -- Update state dynamically
-        local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+ToggleAutofarm:OnChanged(function(newState)
+    autofishEnabled = newState -- Update state dynamically
+    local RodName = ReplicatedStorage.playerstats[LocalPlayer.Name].Stats.rod.Value
+    local lastInventoryChange = os.time()
 
-        if autofishEnabled then
-            -- Teleport to the selected location (both Position and Rotation)
-            if Locations[selectedLocation] then
-                local location = Locations[selectedLocation]
-                LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(location.Position) * CFrame.Angles(math.rad(location.Rotation.X), math.rad(location.Rotation.Y), math.rad(location.Rotation.Z))
-            end
+    -- Function to update the last inventory change time
+    local function updateInventoryChangeTime()
+        lastInventoryChange = os.time()
+    end
 
-            -- Start the autofishing loop in a coroutine
-            coroutine.wrap(function()
-                local XyzClone
-                while autofishEnabled and task.wait(0.1) do
-                    -- Equip the fishing rod
-                    if Backpack:FindFirstChild(RodName) then
-                        LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+    -- Monitor inventory changes
+    Backpack.ChildAdded:Connect(updateInventoryChangeTime)
+    Backpack.ChildRemoved:Connect(updateInventoryChangeTime)
+
+    if autofishEnabled then
+        -- Teleport to the selected location (both Position and Rotation)
+        if Locations[selectedLocation] then
+            local location = Locations[selectedLocation]
+            LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(location.Position) * CFrame.Angles(math.rad(location.Rotation.X), math.rad(location.Rotation.Y), math.rad(location.Rotation.Z))
+        end
+
+        -- Start the autofishing loop in a coroutine
+        coroutine.wrap(function()
+            local XyzClone
+            while autofishEnabled and task.wait(0.1) do
+                -- Equip the fishing rod
+                if Backpack:FindFirstChild(RodName) then
+                    LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+                end
+
+                -- Separate loop to check inventory changes and re-equip the rod if necessary
+                coroutine.wrap(function()
+                    while autofishEnabled do
+                        -- Check if inventory hasn't changed in the last 20 seconds
+                        if os.time() - lastInventoryChange > 20 then
+                            -- Unequip and re-equip the rod
+                            LocalPlayer.Character.Humanoid:UnequipTools()
+                            task.wait(0.5) -- Small delay to ensure unequip
+                            LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
+                            updateInventoryChangeTime() -- Reset the timer
+                        end
+                        task.wait(1) -- Check every second
+                    end
+                end)()
+
+                if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
+                    -- Ensure only one XyzClone exists
+                    if not XyzClone then
+                        XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
+                        XyzClone.Parent = PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
+                        XyzClone.Name = "Lure"
                     end
 
-                    if LocalPlayer.Character:FindFirstChild(RodName) and LocalPlayer.Character:FindFirstChild(RodName):FindFirstChild("bobber") then
-                        -- Ensure only one XyzClone exists
-                        if not XyzClone then
-                            XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
-                            XyzClone.Parent = PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
-                            XyzClone.Name = "Lure"
+                    XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
+                    local lureChanged = false
+                    local lureValue = LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value
+
+                    -- Check if lure value changes within 30 seconds also doesnt work for some reason
+                    coroutine.wrap(function()
+                        local initialLureValue = lureValue
+                        task.wait(15)
+                        if lureValue == initialLureValue then
+                            lureChanged = false
+                            LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000)
+                        else
+                            lureChanged = true
                         end
+                    end)()
 
-                        XyzClone.Text = "<font color='#ff4949'>Lure </font>: 0%"
-                        local lureChanged = false
-                        local lureValue = LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value
-
-                        -- Check if lure value changes within 30 seconds
-                        coroutine.wrap(function()
-                            local initialLureValue = lureValue
-                           -- local initialCastValue = LocalPlayer.Character:FindFirstChild(RodName).values.casted.Value
-                            task.wait(15)
-                            if lureValue == initialLureValue then
-                                lureChanged = false
-                                LocalPlayer.Character.Humanoid:EquipTool(Backpack:FindFirstChild(RodName))
-                            else
-                                lureChanged = true
-                            end
-                        end)()
-
-                        repeat
-                            pcall(function()
-                                PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
-                                game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
-                                game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
-                            end)
-
-                            -- Update lure percentage
-                            XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
-                            RunService.Heartbeat:Wait()
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled or lureChanged
-
-                        XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
-                        delay(1.5, function()
-                            if XyzClone then
-                                XyzClone:Destroy()
-                                XyzClone = nil
-                            end
+                    repeat
+                        pcall(function()
+                            PlayerGui:FindFirstChild("shakeui").safezone:FindFirstChild("button").Size = UDim2.new(1001, 0, 1001, 0)
+                            game:GetService("VirtualUser"):Button1Down(Vector2.new(1, 1))
+                            game:GetService("VirtualUser"):Button1Up(Vector2.new(1, 1))
                         end)
 
-                        repeat
-                            ReplicatedStorage.events.reelfinished:FireServer(1000000000000, true)
-                            task.wait(0.5)
-                        until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
-                    else
-                        LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000)
-                        task.wait(2)
-                    end
-                end
+                        -- Update lure percentage
+                        XyzClone.Text = "<font color='#ff4949'>Lure </font>: " .. string.format("%.2f", LocalPlayer.Character:FindFirstChild(RodName).values.lure.Value) .. "%"
+                        RunService.Heartbeat:Wait()
+                    until not LocalPlayer.Character:FindFirstChild(RodName) or LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled or lureChanged
 
-                -- Clean up XyzClone when loop exits
-                if XyzClone then
-                    XyzClone:Destroy()
-                    XyzClone = nil
+                    XyzClone.Text = "<font color='#ff4949'>FISHING!</font>"
+                    delay(1.5, function()
+                        if XyzClone then
+                            XyzClone:Destroy()
+                            XyzClone = nil
+                        end
+                    end)
+
+                    repeat
+                        ReplicatedStorage.events.reelfinished:FireServer(1000000000000, true)
+                        task.wait(0.5)
+                    until not LocalPlayer.Character:FindFirstChild(RodName) or not LocalPlayer.Character:FindFirstChild(RodName).values.bite.Value or not autofishEnabled
+                else
+                    LocalPlayer.Character:FindFirstChild(RodName).events.cast:FireServer(1000000000000)
+                    task.wait(1)
                 end
-            end)()
-        end
-    end)
+            end
+
+            -- Clean up XyzClone when loop exits
+            if XyzClone then
+                XyzClone:Destroy()
+                XyzClone = nil
+            end
+        end)()
+    end
+end)
 -- // // // Scripts // // // --
     Tabs.Executor:AddButton({
         Title = "Speed Hub X",
