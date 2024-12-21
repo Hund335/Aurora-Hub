@@ -280,6 +280,15 @@ end
     {name = "Alfredrickus", coords = Vector3.new(-1520.60632, 142.923264, 764.522034)},
     }
 
+    local totemvalues = {
+        {name = "Aurora", coords = Vector3.new(-1811, -136, -3282)},
+        {name = "Smokescreen", coords = Vector3.new(2789, 139, -625)},
+        {name = "Windset", coords = Vector3.new(2849, 178, 2702)},
+        {name = "Tempest", coords = Vector3.new(35, 132, 1943)},
+        {name = "Sundial", coords = Vector3.new(-1148, 134, -1075)},
+        {name = "Eclipse", coords = Vector3.new(5968, 273, 838)},
+        {name = "Meteor", coords = Vector3.new(-1948, 275, 230)},
+    }
     local MerchantValues = {
         {name = "moosewood", coords = Vector3.new(470, 150, 260), remotePath = "Marc Merchant"},
         {name = "the depths", coords = Vector3.new(853.2406616210938, -740.3659057617188, 1335.1163330078125), remotePath = "Milo Merchant"},
@@ -330,6 +339,7 @@ function AntiAfk2()
     end)
 
     -- Spawn another thread to press the "L" key every 5 minutes
+function AntiAfk3()
     task.spawn(function()
         while AntiAfk do
             local VirtualInputManager = game:GetService("VirtualInputManager")
@@ -340,8 +350,9 @@ function AntiAfk2()
         end
     end)
 end
-
+end
 AntiAfk2()
+antiAfk3()
 
 
 -- // // // Noclip // // // --
@@ -1031,6 +1042,10 @@ AntiAfk2()
     for _, item in ipairs(ItemValues) do
         table.insert(ItemNames, item.name)
     end
+    local TotemNames = {}
+    for _, npc in ipairs(totemvalues) do
+        table.insert(TotemNames, totem.name)
+    end
     local NPCNames = {}
     for _, npc in ipairs(NPCValues) do
         table.insert(NPCNames, npc.name)
@@ -1120,6 +1135,50 @@ AntiAfk2()
                     end
                 else
                     warn("No location selected")
+                end
+            end,
+        })
+        --/// /// Totems /// /// --
+        local section = Tabs.Teleport:AddSection("Totems")
+        -- Create the dropdown menu
+        local Dropdown = Tabs.Teleport:AddDropdown("TotemDropdown", {
+            Title = "Select a Totem",
+            Values = TotemNames,
+            Multi = false,
+            Default = 1,
+        })
+
+        -- Add the teleport button
+        Tabs.Teleport:AddButton({
+            Title = "Teleport",
+            Description = "Teleport to the selected Totem",
+            Callback = function()
+                -- Get the selected location name
+                local selectedTotemName = Dropdown.Value
+                if selectedTotemName then
+                    -- Find the location in LocationValues by name
+                    local selectedTotem
+                    for _, location in ipairs(totemvalues) do
+                        if location.name == selectedTotemName then
+                            selectedTotem = totem
+                            break
+                        end
+                    end
+
+                    -- If a valid location was found
+                    if selectedTotem and game.Players.LocalPlayer.Character then
+                        local character = game.Players.LocalPlayer.Character
+                        if character:FindFirstChild("HumanoidRootPart") then
+                            -- Teleport the player to the selected location's coordinates
+                            character.HumanoidRootPart.CFrame = CFrame.new(selectedLocation.coords)
+                        else
+                            warn("HumanoidRootPart not found in the character")
+                        end
+                    else
+                        warn("Location not found or player character missing")
+                    end
+                else
+                    warn("No Totem selected")
                 end
             end,
         })
